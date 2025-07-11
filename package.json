@@ -1,8 +1,18 @@
 {
   "name": "tauri-plugin-apple-music-kit-api",
   "version": "0.1.0",
-  "author": "You",
-  "description": "",
+  "author": "Patrick Quinn",
+  "description": "Tauri plugin for Apple MusicKit integration - TypeScript API bindings",
+  "keywords": ["tauri", "plugin", "apple", "music", "musickit", "ios", "macos"],
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patrickquinn/tauri-plugin-apple-music-kit"
+  },
+  "bugs": {
+    "url": "https://github.com/patrickquinn/tauri-plugin-apple-music-kit/issues"
+  },
+  "homepage": "https://github.com/patrickquinn/tauri-plugin-apple-music-kit#readme",
   "type": "module",
   "types": "./dist-js/index.d.ts",
   "main": "./dist-js/index.cjs",
@@ -20,7 +30,7 @@
     "build": "cd guest-js && bun run build && cd .. && cargo build --release",
     "dev": "bun run rollup -c -w",
     "check": "tsc --noEmit && cargo check",
-    "prepublishOnly": "bun build"
+    "prepublishOnly": "cd guest-js && bun run build"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.6.0"
