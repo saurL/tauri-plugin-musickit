@@ -1,0 +1,14 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "identifier": "com.tauri.apple-music-kit-test",
+  "productName": "apple-music-kit-test",
+  "version": "0.0.1",
+  "build": {
+    "frontendDist": "../dist"
+  },
+  "bundle": {
+    "ios": {
+        "developmentTeam": "87YB226AZE"
+    }
+  }
+} 

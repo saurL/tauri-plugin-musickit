@@ -1,0 +1,22 @@
+[default]
+description = "Default permissions for the plugin"
+permissions = [
+    "allow-initialize",
+    "allow-authorize",
+    "allow-get-authorization-status",
+    "allow-get-storefront-id",
+    "allow-get-queue",
+    "allow-play",
+    "allow-pause",
+    "allow-stop",
+    "allow-seek",
+    "allow-next",
+    "allow-previous",
+    "allow-skip-to-item",
+    "allow-set-queue",
+    "allow-append-to-queue",
+    "allow-insert-at-position",
+    "allow-remove-from-queue",
+    "allow-get-current-track",
+    "allow-get-playback-state"
+]

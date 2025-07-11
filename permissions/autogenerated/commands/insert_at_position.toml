@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-insert-at-position"
+description = "Enables the insert_at_position command without any pre-configured scope."
+commands.allow = ["insert_at_position"]
+
+[[permission]]
+identifier = "deny-insert-at-position"
+description = "Denies the insert_at_position command without any pre-configured scope."
+commands.deny = ["insert_at_position"]
