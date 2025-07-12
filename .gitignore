@@ -15,3 +15,7 @@ node_modules/
 
 dist-js
 dist
+
+/ios/xcode-build
+/macos/xcode-build
+*.log

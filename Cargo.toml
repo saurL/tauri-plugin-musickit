@@ -1,6 +1,6 @@
 [package]
 name = "tauri-plugin-apple-music-kit"
-version = "0.2.0"
+version = "0.2.1"
 description = "Tauri plugin for Apple MusicKit integration"
 authors = ["Patrick Quinn"]
 license = "MIT OR Apache-2.0"
@@ -10,7 +10,7 @@ repository = "https://github.com/patrickquinn/tauri-plugin-apple-music-kit"
 keywords = ["tauri", "plugin", "apple", "music", "musickit"]
 categories = ["api-bindings", "multimedia"]
 exclude = ["/examples", "/dist-js", "/guest-js", "/node_modules"]
-links = "tauri-plugin-apple-music-kit"
+links = "MusicKitPlugin"
 
 [lib]
 name = "tauri_plugin_apple_music_kit"
