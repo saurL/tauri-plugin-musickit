@@ -20,7 +20,16 @@ const COMMANDS: &[&str] = &[
 ];
 
 fn main() {
-    tauri_plugin::Builder::new(COMMANDS)
-        .ios_path("ios")
-        .build();
+    let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
+    println!("cargo:warning=Building for target OS: {}", target_os);
+    
+    let mut builder = tauri_plugin::Builder::new(COMMANDS);
+
+    if target_os == "ios" {
+        builder = builder.ios_path("ios");
+    } else if target_os == "macos" {
+        builder = builder.ios_path("macos");
+    }
+
+    builder.build();
 }

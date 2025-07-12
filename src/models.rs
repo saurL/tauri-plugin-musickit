@@ -78,4 +78,4 @@ pub struct TrackChangeEvent {
 pub struct ErrorEvent {
     pub error: String,
     pub code: Option<String>,
-}
+} 
