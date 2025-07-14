@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "identifier": "com.tauri.apple-music-kit-test",
   "productName": "apple-music-kit-test",
-  "version": "0.2.0",
+  "version": "0.2.5",
   "build": {
     "frontendDist": "../dist"
   },

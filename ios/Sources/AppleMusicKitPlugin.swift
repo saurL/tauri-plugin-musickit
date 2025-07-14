@@ -677,3 +677,11 @@ enum MusicKitError: Error, LocalizedError {
         }
     }
 }
+
+// MARK: - Plugin Registration
+
+@_cdecl("init_plugin_apple_music_kit")
+func init_plugin_apple_music_kit() -> UnsafeMutableRawPointer {
+    let plugin = MusicKitPlugin()
+    return Unmanaged.passRetained(plugin).toOpaque()
+}

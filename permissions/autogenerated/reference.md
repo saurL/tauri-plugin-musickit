@@ -525,4 +525,30 @@ Denies the stop command without any pre-configured scope.
 
 </td>
 </tr>
+
+<tr>
+<td>
+
+`apple-music-kit:allow-unauthorize`
+
+</td>
+<td>
+
+Enables the unauthorize command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`apple-music-kit:deny-unauthorize`
+
+</td>
+<td>
+
+Denies the unauthorize command without any pre-configured scope.
+
+</td>
+</tr>
 </table>

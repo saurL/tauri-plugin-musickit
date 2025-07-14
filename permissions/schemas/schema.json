@@ -523,6 +523,18 @@
           "markdownDescription": "Denies the stop command without any pre-configured scope."
         },
         {
+          "description": "Enables the unauthorize command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-unauthorize",
+          "markdownDescription": "Enables the unauthorize command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the unauthorize command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-unauthorize",
+          "markdownDescription": "Denies the unauthorize command without any pre-configured scope."
+        },
+        {
           "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-initialize`\n- `allow-authorize`\n- `allow-get-authorization-status`\n- `allow-get-storefront-id`\n- `allow-get-queue`\n- `allow-play`\n- `allow-pause`\n- `allow-stop`\n- `allow-seek`\n- `allow-next`\n- `allow-previous`\n- `allow-skip-to-item`\n- `allow-set-queue`\n- `allow-append-to-queue`\n- `allow-insert-at-position`\n- `allow-remove-from-queue`\n- `allow-get-current-track`\n- `allow-get-playback-state`",
           "type": "string",
           "const": "default",
