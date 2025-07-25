@@ -58,6 +58,20 @@ export class MusicKit {
   }
 
   /**
+   * Set developer token
+   */
+  async setDeveloperToken(token: string): Promise<void> {
+    await invoke('plugin:musickit|setDeveloperToken', { token });
+  }
+
+  /**
+   * Set user token
+   */
+  async setUserToken(token: string): Promise<void> {
+    await invoke('plugin:musickit|setUserToken', { token });
+  }
+
+  /**
    * Get storefront information
    */
   async getStorefrontId(): Promise<string | null> {
@@ -130,8 +144,8 @@ export class MusicKit {
   /**
    * Set the playback queue
    */
-  async setQueue(tracks: MusicKitTrack[], startPlaying: boolean = false): Promise<QueueOperationResponse> {
-    return await invoke('plugin:musickit|setQueue', { tracks, startPlaying });
+  async setQueue(tracks: MusicKitTrack[], startPlaying: boolean = false, startPosition: number = 0): Promise<QueueOperationResponse> {
+    return await invoke('plugin:musickit|setQueue', { tracks, startPlaying, startPosition });
   }
 
   /**
@@ -145,7 +159,7 @@ export class MusicKit {
    * Insert track at position
    */
   async insertTrackAtPosition(track: MusicKitTrack, position: number): Promise<QueueOperationResponse> {
-    return await invoke('plugin:musickit|insertAtPosition', { track, position });
+    return await invoke('plugin:musickit|insertTrackAtPosition', { track, position });
   }
 
   /**
@@ -159,7 +173,7 @@ export class MusicKit {
    * Remove track from queue
    */
   async removeTrackFromQueue(trackId: string): Promise<QueueOperationResponse> {
-    return await invoke('plugin:musickit|removeFromQueue', { trackId });
+    return await invoke('plugin:musickit|removeTrackFromQueue', { trackId });
   }
 
   /**
@@ -180,7 +194,7 @@ export class MusicKit {
    * Append tracks to queue
    */
   async appendTracksToQueue(tracks: MusicKitTrack[]): Promise<QueueOperationResponse> {
-    return await invoke('plugin:musickit|appendToQueue', { tracks });
+    return await invoke('plugin:musickit|appendTracksToQueue', { tracks });
   }
 
   /**
@@ -209,8 +223,12 @@ export class MusicKit {
   removeAllEventListeners(): void {
     this.eventListeners.forEach((listeners) => {
       listeners.forEach((listener) => {
-        // PluginListener doesn't have a call signature, so we need to handle it differently
-        // For now, we'll just clear the map
+        // PluginListener is a function that can be called to remove the listener
+        try {
+          (listener as any)();
+        } catch (error) {
+          // Ignore errors when removing listeners
+        }
       });
     });
     this.eventListeners.clear();

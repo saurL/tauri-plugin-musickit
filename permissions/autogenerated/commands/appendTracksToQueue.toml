@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-appendTracksToQueue"
+description = "Enables the appendTracksToQueue command without any pre-configured scope."
+commands.allow = ["appendTracksToQueue"]
+
+[[permission]]
+identifier = "deny-appendTracksToQueue"
+description = "Denies the appendTracksToQueue command without any pre-configured scope."
+commands.deny = ["appendTracksToQueue"]

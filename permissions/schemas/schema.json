@@ -307,6 +307,18 @@
           "markdownDescription": "Denies the appendToQueue command without any pre-configured scope."
         },
         {
+          "description": "Enables the appendTracksToQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-appendTracksToQueue",
+          "markdownDescription": "Enables the appendTracksToQueue command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the appendTracksToQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-appendTracksToQueue",
+          "markdownDescription": "Denies the appendTracksToQueue command without any pre-configured scope."
+        },
+        {
           "description": "Enables the append_to_queue command without any pre-configured scope.",
           "type": "string",
           "const": "allow-append-to-queue",
@@ -535,6 +547,54 @@
           "markdownDescription": "Denies the insertAtPosition command without any pre-configured scope."
         },
         {
+          "description": "Enables the insertTrackAtPosition command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-insertTrackAtPosition",
+          "markdownDescription": "Enables the insertTrackAtPosition command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the insertTrackAtPosition command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-insertTrackAtPosition",
+          "markdownDescription": "Denies the insertTrackAtPosition command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the insertTrackLast command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-insertTrackLast",
+          "markdownDescription": "Enables the insertTrackLast command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the insertTrackLast command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-insertTrackLast",
+          "markdownDescription": "Denies the insertTrackLast command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the insertTrackNext command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-insertTrackNext",
+          "markdownDescription": "Enables the insertTrackNext command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the insertTrackNext command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-insertTrackNext",
+          "markdownDescription": "Denies the insertTrackNext command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the insertTracksAtPosition command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-insertTracksAtPosition",
+          "markdownDescription": "Enables the insertTracksAtPosition command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the insertTracksAtPosition command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-insertTracksAtPosition",
+          "markdownDescription": "Denies the insertTracksAtPosition command without any pre-configured scope."
+        },
+        {
           "description": "Enables the insert_at_position command without any pre-configured scope.",
           "type": "string",
           "const": "allow-insert-at-position",
@@ -631,6 +691,18 @@
           "markdownDescription": "Denies the removeFromQueue command without any pre-configured scope."
         },
         {
+          "description": "Enables the removeTrackFromQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-removeTrackFromQueue",
+          "markdownDescription": "Enables the removeTrackFromQueue command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the removeTrackFromQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-removeTrackFromQueue",
+          "markdownDescription": "Denies the removeTrackFromQueue command without any pre-configured scope."
+        },
+        {
           "description": "Enables the remove_from_queue command without any pre-configured scope.",
           "type": "string",
           "const": "allow-remove-from-queue",
@@ -689,6 +761,18 @@
           "type": "string",
           "const": "deny-setUserToken",
           "markdownDescription": "Denies the setUserToken command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the setVolume command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-setVolume",
+          "markdownDescription": "Enables the setVolume command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the setVolume command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-setVolume",
+          "markdownDescription": "Denies the setVolume command without any pre-configured scope."
         },
         {
           "description": "Enables the set_developer_token command without any pre-configured scope.",
@@ -761,6 +845,18 @@
           "type": "string",
           "const": "deny-unauthorize",
           "markdownDescription": "Denies the unauthorize command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the updateQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-updateQueue",
+          "markdownDescription": "Enables the updateQueue command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the updateQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-updateQueue",
+          "markdownDescription": "Denies the updateQueue command without any pre-configured scope."
         },
         {
           "description": "Default permissions for the musickit plugin\n#### This default permission set includes:\n\n- `allowInitialize`\n- `allowAuthorize`\n- `allowUnauthorize`\n- `allowGetAuthorizationStatus`\n- `allowGetUserToken`\n- `allowSetUserToken`\n- `allowGetDeveloperToken`\n- `allowSetDeveloperToken`\n- `allowGetStorefrontId`\n- `allowGetStorefront`\n- `allowSetStorefront`\n- `allowGetQueue`\n- `allowPlay`\n- `allowPause`\n- `allowStop`\n- `allowSeek`\n- `allowNext`\n- `allowPrevious`\n- `allowSkipToItem`\n- `allowSetQueue`\n- `allowGetCurrentTrack`\n- `allowGetPlaybackState`\n- `allowAppendTracksToQueue`\n- `allowInsertTrackAtPosition`\n- `allowRemoveTrackFromQueue`\n- `allowRegisterListener`",

@@ -33,24 +33,29 @@ export interface QueueOperationResponse {
   error?: string;
 }
 
-export interface StateUpdateEvent {
-  playing: boolean;
-  currentTrack?: MusicKitTrack;
-  currentTime: number;
-  duration: number;
-  queuePosition: number;
-  shuffleMode: string;
-  repeatMode: string;
-  volume: number;
-}
-
 export interface QueueUpdateEvent {
   items: MusicKitTrack[];
   position: number;
 }
 
+export interface StateUpdateEvent {
+  state: string; // "playing", "paused", "stopped", etc.
+}
+
 export interface TrackChangeEvent {
-  track: MusicKitTrack;
+  track: {
+    id: string;
+    title: string;
+    artistName: string;
+    albumName: string;
+    genreNames: string;
+    durationInMillis: number;
+    artwork: string;
+  };
+}
+
+export interface PlaybackTimeEvent {
+  currentTime: number;
 }
 
 export interface ErrorEvent {
@@ -59,10 +64,7 @@ export interface ErrorEvent {
 }
 
 export interface MusicKitEventMap {
-  'PLAYER_ADAPTER_EVENTS.INITIALIZED': void;
-  'PLAYER_ADAPTER_EVENTS.AUTHORIZATION_STATUS_CHANGE': AuthorizationResponse;
-  'PLAYER_ADAPTER_EVENTS.STATE_UPDATE': StateUpdateEvent;
-  'PLAYER_ADAPTER_EVENTS.QUEUE_UPDATE': QueueUpdateEvent;
-  'PLAYER_ADAPTER_EVENTS.TRACK_CHANGE': TrackChangeEvent;
-  'PLAYER_ADAPTER_EVENTS.ERROR': ErrorEvent;
+  'musickit-playback-state-changed': StateUpdateEvent;
+  'musickit-track-changed': TrackChangeEvent;
+  'musickit-playback-time-changed': PlaybackTimeEvent;
 } 

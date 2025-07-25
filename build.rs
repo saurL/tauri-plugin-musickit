@@ -21,13 +21,17 @@ const COMMANDS: &[&str] = &[
     "next",
     "previous",
     "skipToItem",
+    "setVolume",
     "setQueue",
+    "updateQueue",
+    "insertTrackAtPosition",
+    "insertTracksAtPosition",
+    "removeTrackFromQueue",
+    "insertTrackNext",
+    "insertTrackLast",
+    "appendTracksToQueue",
     "getCurrentTrack",
     "getPlaybackState",
-    "appendToQueue",
-    "insertAtPosition",
-    "removeFromQueue",
-    "registerListener",
 ];
 
 fn main() {

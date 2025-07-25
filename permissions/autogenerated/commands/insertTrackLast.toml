@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-insertTrackLast"
+description = "Enables the insertTrackLast command without any pre-configured scope."
+commands.allow = ["insertTrackLast"]
+
+[[permission]]
+identifier = "deny-insertTrackLast"
+description = "Denies the insertTrackLast command without any pre-configured scope."
+commands.deny = ["insertTrackLast"]

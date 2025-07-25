@@ -69,6 +69,32 @@ Denies the appendToQueue command without any pre-configured scope.
 <tr>
 <td>
 
+`musickit:allow-appendTracksToQueue`
+
+</td>
+<td>
+
+Enables the appendTracksToQueue command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`musickit:deny-appendTracksToQueue`
+
+</td>
+<td>
+
+Denies the appendTracksToQueue command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `musickit:allow-append-to-queue`
 
 </td>
@@ -563,6 +589,110 @@ Denies the insertAtPosition command without any pre-configured scope.
 <tr>
 <td>
 
+`musickit:allow-insertTrackAtPosition`
+
+</td>
+<td>
+
+Enables the insertTrackAtPosition command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`musickit:deny-insertTrackAtPosition`
+
+</td>
+<td>
+
+Denies the insertTrackAtPosition command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`musickit:allow-insertTrackLast`
+
+</td>
+<td>
+
+Enables the insertTrackLast command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`musickit:deny-insertTrackLast`
+
+</td>
+<td>
+
+Denies the insertTrackLast command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`musickit:allow-insertTrackNext`
+
+</td>
+<td>
+
+Enables the insertTrackNext command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`musickit:deny-insertTrackNext`
+
+</td>
+<td>
+
+Denies the insertTrackNext command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`musickit:allow-insertTracksAtPosition`
+
+</td>
+<td>
+
+Enables the insertTracksAtPosition command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`musickit:deny-insertTracksAtPosition`
+
+</td>
+<td>
+
+Denies the insertTracksAtPosition command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `musickit:allow-insert-at-position`
 
 </td>
@@ -771,6 +901,32 @@ Denies the removeFromQueue command without any pre-configured scope.
 <tr>
 <td>
 
+`musickit:allow-removeTrackFromQueue`
+
+</td>
+<td>
+
+Enables the removeTrackFromQueue command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`musickit:deny-removeTrackFromQueue`
+
+</td>
+<td>
+
+Denies the removeTrackFromQueue command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `musickit:allow-remove-from-queue`
 
 </td>
@@ -894,6 +1050,32 @@ Enables the setUserToken command without any pre-configured scope.
 <td>
 
 Denies the setUserToken command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`musickit:allow-setVolume`
+
+</td>
+<td>
+
+Enables the setVolume command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`musickit:deny-setVolume`
+
+</td>
+<td>
+
+Denies the setVolume command without any pre-configured scope.
 
 </td>
 </tr>
@@ -1050,6 +1232,32 @@ Enables the unauthorize command without any pre-configured scope.
 <td>
 
 Denies the unauthorize command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`musickit:allow-updateQueue`
+
+</td>
+<td>
+
+Enables the updateQueue command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`musickit:deny-updateQueue`
+
+</td>
+<td>
+
+Denies the updateQueue command without any pre-configured scope.
 
 </td>
 </tr>

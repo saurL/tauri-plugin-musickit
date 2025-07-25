@@ -13,6 +13,21 @@ pub struct MusicKitTrack {
     pub is_playable: bool,
 }
 
+impl Default for MusicKitTrack {
+    fn default() -> Self {
+        Self {
+            id: String::new(),
+            title: String::new(),
+            artist: String::new(),
+            album: String::new(),
+            duration: 0.0,
+            artwork_url: None,
+            is_explicit: false,
+            is_playable: true,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MusicKitTrackData {

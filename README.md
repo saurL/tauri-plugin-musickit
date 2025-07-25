@@ -1,20 +1,20 @@
-# Tauri Plugin apple-music-kit
+# Tauri Plugin MusicKit
 
-[![crates.io](https://img.shields.io/crates/v/tauri-plugin-apple-music-kit)](https://crates.io/crates/tauri-plugin-apple-music-kit)
-[![npm](https://img.shields.io/npm/v/tauri-plugin-apple-music-kit-api)](https://www.npmjs.com/package/tauri-plugin-apple-music-kit-api)
-[![documentation](https://img.shields.io/badge/docs-API%20docs-blue)](https://docs.rs/tauri-plugin-apple-music-kit)
+[![crates.io](https://img.shields.io/crates/v/tauri-plugin-musickit)](https://crates.io/crates/tauri-plugin-musickit)
+[![npm](https://img.shields.io/npm/v/tauri-plugin-musickit-api)](https://www.npmjs.com/package/tauri-plugin-musickit-api)
+[![documentation](https://img.shields.io/badge/docs-API%20docs-blue)](https://docs.rs/tauri-plugin-musickit)
 [![License: Apache-2.0 OR MIT](https://img.shields.io/badge/License-Apache%202.0%20OR%20MIT-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-A Tauri 2 plugin focused on providing comprehensive Apple MusicKit integration for iOS and macOS applications. It allows you to programmatically control music playback, manage queues, handle authorization, and respond to music events through a unified API.
+A Tauri 2 plugin providing comprehensive Apple MusicKit integration for iOS and macOS applications. It allows you to programmatically control music playback, manage queues, handle authorization, and respond to music events through a unified API.
 
 ## Features
 
 ### Core MusicKit Integration
 - **Authorization Management**: Request and check Apple Music authorization status
-- **Playback Control**: Play, pause, skip, and control music playback
-- **Queue Management**: Add tracks to queue, manage playback queue
+- **Playback Control**: Play, pause, stop, seek, and control music playback
+- **Queue Management**: Set, update, insert, remove, and manage playback queue
 - **Track Information**: Get current track details, album art, and metadata
-- **Event System**: Listen to playback state changes and music events
+- **Event System**: Listen to playback state changes, track changes, and time updates
 - **Cross-Platform**: Works on both iOS and macOS with platform-specific optimizations
 
 ### Platform Support
@@ -38,7 +38,7 @@ Add the plugin to your Tauri app's `src-tauri/Cargo.toml`:
 
 ```toml
 [dependencies]
-tauri-plugin-apple-music-kit = "0.1.0"
+tauri-plugin-musickit = "0.2.6"
 ```
 
 ### 2. JavaScript/TypeScript API Installation
@@ -46,11 +46,11 @@ tauri-plugin-apple-music-kit = "0.1.0"
 Install the TypeScript API bindings:
 
 ```bash
-npm install tauri-plugin-apple-music-kit-api
+npm install tauri-plugin-musickit-api
 # or
-yarn add tauri-plugin-apple-music-kit-api
+yarn add tauri-plugin-musickit-api
 # or
-pnpm add tauri-plugin-apple-music-kit-api
+pnpm add tauri-plugin-musickit-api
 ```
 
 ### 3. Register the Plugin (Rust)
@@ -60,7 +60,7 @@ In your `src-tauri/src/main.rs`, register the plugin:
 ```rust
 fn main() {
     tauri::Builder::default()
-        .plugin(tauri_plugin_apple_music_kit::init())
+        .plugin(tauri_plugin_musickit::init())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -83,8 +83,8 @@ Add the required permissions to your `src-tauri/tauri.conf.json`:
       "csp": null
     },
     "plugins": {
-      "apple-music-kit": {
-        "scope": ["authorize", "getAuthorizationStatus", "initialize", "play", "pause", "skipToNext", "skipToPrevious", "getCurrentTrack", "getPlaybackState", "addToQueue", "getQueue", "getUserToken", "getDeveloperToken", "getStorefrontId"]
+      "musickit": {
+        "scope": ["authorize", "getAuthorizationStatus", "initialize", "play", "pause", "stop", "seek", "next", "previous", "skipToItem", "setVolume", "setQueue", "updateQueue", "insertTrackAtPosition", "insertTracksAtPosition", "removeTrackFromQueue", "insertTrackNext", "insertTrackLast", "appendTracksToQueue", "getCurrentTrack", "getPlaybackState", "getQueue", "getUserToken", "getDeveloperToken", "setDeveloperToken", "setUserToken", "getStorefrontId", "getStorefront"]
       }
     }
   }
@@ -96,98 +96,205 @@ Add the required permissions to your `src-tauri/tauri.conf.json`:
 ### TypeScript/JavaScript API
 
 ```typescript
-import { invoke } from '@tauri-apps/api/core';
-import { listen } from '@tauri-apps/api/event';
+import { musicKit } from 'tauri-plugin-musickit-api';
 
 // Initialize the plugin
-await invoke('plugin:apple-music-kit|initialize');
+await musicKit.initialize();
 
 // Request authorization
-const authResult = await invoke('plugin:apple-music-kit|authorize');
+const authResult = await musicKit.authorize();
 console.log('Authorization status:', authResult);
 
+// Set developer token (required for authorization)
+await musicKit.setDeveloperToken('your-developer-token');
+
 // Control playback
-await invoke('plugin:apple-music-kit|play');
-await invoke('plugin:apple-music-kit|pause');
-await invoke('plugin:apple-music-kit|skipToNext');
-await invoke('plugin:apple-music-kit|skipToPrevious');
+await musicKit.play();
+await musicKit.pause();
+await musicKit.stop();
+await musicKit.next();
+await musicKit.previous();
+
+// Seek to specific time
+await musicKit.seek(30.5); // 30.5 seconds
+
+// Set volume (iOS: system volume, macOS: may be limited)
+await musicKit.setVolume(0.8);
 
 // Get current track
-const currentTrack = await invoke('plugin:apple-music-kit|getCurrentTrack');
+const currentTrack = await musicKit.getCurrentTrack();
 console.log('Current track:', currentTrack);
 
 // Get playback state
-const playbackState = await invoke('plugin:apple-music-kit|getPlaybackState');
+const playbackState = await musicKit.getPlaybackState();
 console.log('Playback state:', playbackState);
 
-// Add track to queue
-await invoke('plugin:apple-music-kit|addToQueue', {
-  trackId: '123456789'
-});
+// Queue management
+const tracks = [
+  {
+    id: '123456789',
+    title: 'Song Title',
+    artist: 'Artist Name',
+    album: 'Album Name',
+    duration: 180.5,
+    artworkUrl: 'https://example.com/artwork.jpg',
+    isExplicit: false,
+    isPlayable: true
+  }
+];
+
+// Set queue
+await musicKit.setQueue(tracks, true, 0); // tracks, startPlaying, startPosition
+
+// Update queue
+await musicKit.updateQueue(tracks);
+
+// Insert track at position
+await musicKit.insertTrackAtPosition(tracks[0], 2);
+
+// Insert tracks at position
+await musicKit.insertTracksAtPosition(tracks, 1);
+
+// Remove track from queue
+await musicKit.removeTrackFromQueue('123456789');
+
+// Insert track next (after current)
+await musicKit.insertTrackNext(tracks[0]);
+
+// Insert track last
+await musicKit.insertTrackLast(tracks[0]);
+
+// Append tracks to queue
+await musicKit.appendTracksToQueue(tracks);
+
+// Get queue
+const queue = await musicKit.getQueue();
+console.log('Current queue:', queue);
+
+// Skip to specific track
+await musicKit.skipToItem('123456789', true); // trackId, startPlaying
 
 // Listen to events
-await listen('apple-music-kit://playback-state-changed', (event) => {
-  console.log('Playback state changed:', event.payload);
+await musicKit.addEventListener('musickit-playback-state-changed', (event) => {
+  console.log('Playback state changed:', event.state);
 });
 
-await listen('apple-music-kit://track-changed', (event) => {
-  console.log('Track changed:', event.payload);
+await musicKit.addEventListener('musickit-track-changed', (event) => {
+  console.log('Track changed:', event.track);
 });
+
+await musicKit.addEventListener('musickit-playback-time-changed', (event) => {
+  console.log('Playback time:', event.currentTime);
+});
+
+// Clean up event listeners
+musicKit.removeAllEventListeners();
 ```
 
 ### Available Commands
 
 | Command | Description | Parameters | Returns |
 |---------|-------------|------------|---------|
-| `initialize` | Initialize the MusicKit plugin | None | `{ success: boolean }` |
-| `authorize` | Request Apple Music authorization | None | `{ status: string }` |
-| `getAuthorizationStatus` | Check current authorization status | None | `{ status: string }` |
-| `play` | Start or resume playback | None | `{ success: boolean }` |
-| `pause` | Pause playback | None | `{ success: boolean }` |
-| `skipToNext` | Skip to next track | None | `{ success: boolean }` |
-| `skipToPrevious` | Skip to previous track | None | `{ success: boolean }` |
-| `getCurrentTrack` | Get current track information | None | `TrackInfo \| null` |
-| `getPlaybackState` | Get current playback state | None | `PlaybackState` |
-| `addToQueue` | Add track to queue | `{ trackId: string }` | `{ success: boolean }` |
-| `getQueue` | Get current queue | None | `TrackInfo[]` |
-| `getUserToken` | Get user token (iOS only) | None | `string \| null` |
-| `getDeveloperToken` | Get developer token (iOS only) | None | `string \| null` |
-| `getStorefrontId` | Get storefront ID | None | `string` |
+| `initialize` | Initialize the MusicKit plugin | None | `void` |
+| `authorize` | Request Apple Music authorization | None | `AuthorizationResponse` |
+| `unauthorize` | Unauthorize Apple Music access | None | `UnauthorizeResponse` |
+| `getAuthorizationStatus` | Check current authorization status | None | `AuthorizationStatusResponse` |
+| `setDeveloperToken` | Set developer token for authorization | `{ token: string }` | `void` |
+| `setUserToken` | Set user token | `{ token: string }` | `void` |
+| `getDeveloperToken` | Get developer token | None | `string \| null` |
+| `getUserToken` | Get user token | None | `string \| null` |
+| `getStorefrontId` | Get storefront ID | None | `string \| null` |
+| `getStorefront` | Get storefront information | None | `object \| null` |
+| `play` | Start or resume playback | None | `void` |
+| `pause` | Pause playback | None | `void` |
+| `stop` | Stop playback | None | `void` |
+| `seek` | Seek to specific time | `{ time: number }` | `void` |
+| `next` | Skip to next track | None | `void` |
+| `previous` | Skip to previous track | None | `void` |
+| `skipToItem` | Skip to specific track | `{ trackId: string, startPlaying: boolean }` | `void` |
+| `setVolume` | Set volume (iOS: system volume) | `{ volume: number }` | `void` |
+| `setQueue` | Set playback queue | `{ tracks: MusicKitTrack[], startPlaying: boolean, startPosition: number }` | `QueueOperationResponse` |
+| `updateQueue` | Update current queue | `{ tracks: MusicKitTrack[] }` | `QueueOperationResponse` |
+| `insertTrackAtPosition` | Insert track at position | `{ track: MusicKitTrack, position: number }` | `QueueOperationResponse` |
+| `insertTracksAtPosition` | Insert tracks at position | `{ tracks: MusicKitTrack[], position: number }` | `QueueOperationResponse` |
+| `removeTrackFromQueue` | Remove track from queue | `{ trackId: string }` | `QueueOperationResponse` |
+| `insertTrackNext` | Insert track after current | `{ track: MusicKitTrack }` | `QueueOperationResponse` |
+| `insertTrackLast` | Insert track at end | `{ track: MusicKitTrack }` | `QueueOperationResponse` |
+| `appendTracksToQueue` | Append tracks to queue | `{ tracks: MusicKitTrack[] }` | `QueueOperationResponse` |
+| `getCurrentTrack` | Get current track information | None | `MusicKitTrack \| null` |
+| `getPlaybackState` | Get current playback state | None | `StateUpdateEvent` |
+| `getQueue` | Get current queue | None | `QueueResponse` |
 
 ### Events
 
 | Event | Description | Payload |
 |-------|-------------|---------|
-| `apple-music-kit://playback-state-changed` | Playback state changed | `PlaybackState` |
-| `apple-music-kit://track-changed` | Current track changed | `TrackInfo` |
-| `apple-music-kit://queue-changed` | Queue updated | `TrackInfo[]` |
-| `apple-music-kit://authorization-changed` | Authorization status changed | `{ status: string }` |
+| `musickit-playback-state-changed` | Playback state changed | `{ state: string }` |
+| `musickit-track-changed` | Current track changed | `{ track: TrackData }` |
+| `musickit-playback-time-changed` | Playback time updated | `{ currentTime: number }` |
 
 ### TypeScript Types
 
 ```typescript
-interface TrackInfo {
+interface MusicKitTrack {
   id: string;
   title: string;
   artist: string;
   album: string;
+  duration: number;
   artworkUrl?: string;
-  duration: number;
   isExplicit: boolean;
+  isPlayable: boolean;
 }
 
-interface PlaybackState {
-  isPlaying: boolean;
-  isPaused: boolean;
-  isStopped: boolean;
+interface AuthorizationResponse {
+  status: 'authorized' | 'notAuthorized' | 'error';
+  error?: string;
+}
+
+interface UnauthorizeResponse {
+  status: 'unauthorized' | 'error';
+  error?: string;
+}
+
+interface AuthorizationStatusResponse {
+  status: 'authorized' | 'notAuthorized' | 'notInitialized';
+}
+
+interface QueueResponse {
+  items: MusicKitTrack[];
+  position: number;
+}
+
+interface QueueOperationResponse {
+  success: boolean;
+  error?: string;
+}
+
+interface StateUpdateEvent {
+  state: string; // "playing", "paused", "stopped", etc.
+}
+
+interface TrackChangeEvent {
+  track: {
+    id: string;
+    title: string;
+    artistName: string;
+    albumName: string;
+    genreNames: string;
+    durationInMillis: number;
+    artwork: string;
+  };
+}
+
+interface PlaybackTimeEvent {
   currentTime: number;
-  duration: number;
-  repeatMode: 'none' | 'one' | 'all';
-  shuffleMode: 'off' | 'on';
 }
 
-interface AuthorizationStatus {
-  status: 'notDetermined' | 'denied' | 'restricted' | 'authorized';
+interface MusicKitEventMap {
+  'musickit-playback-state-changed': StateUpdateEvent;
+  'musickit-track-changed': TrackChangeEvent;
+  'musickit-playback-time-changed': PlaybackTimeEvent;
 }
 ```
 
@@ -197,8 +304,8 @@ interface AuthorizationStatus {
 
 ```bash
 # Clone the repository
-git clone https://github.com/patrickquinn/tauri-plugin-apple-music-kit.git
-cd tauri-plugin-apple-music-kit
+git clone https://github.com/patrickquinn/tauri-plugin-musickit.git
+cd tauri-plugin-musickit
 
 # Install dependencies
 bun install
@@ -231,15 +338,18 @@ xcodebuild -scheme MusicKitPlugin -destination 'generic/platform=macOS' build
 ### iOS
 - Requires iOS 15+ for MusicKit APIs
 - Full MusicKit integration with native Swift implementation
+- Sophisticated queue management with shadow queue system
 - Supports all MusicKit features including authorization, playback control, and queue management
+- Volume control is handled by the system (setVolume is a stub)
 
 ### macOS
 - Requires macOS 12+ for MusicKit APIs
 - Platform-specific implementation with macOS optimizations
+- Uses ApplicationMusicPlayer for modern MusicKit integration
 - Some features may be limited compared to iOS
 
 ### Desktop (Windows/Linux)
-- Returns `UnsupportedPlatform` errors
+- Returns appropriate platform errors
 - Stubbed implementations for development compatibility
 
 ## License
@@ -261,5 +371,5 @@ at your option.
 
 ## Published Packages
 
-- **Rust Crate**: [`tauri-plugin-apple-music-kit`](https://crates.io/crates/tauri-plugin-apple-music-kit) on crates.io
-- **NPM Package**: [`tauri-plugin-apple-music-kit-api`](https://www.npmjs.com/package/tauri-plugin-apple-music-kit-api) on npm
+- **Rust Crate**: [`tauri-plugin-musickit`](https://crates.io/crates/tauri-plugin-musickit) on crates.io
+- **NPM Package**: [`tauri-plugin-musickit-api`](https://www.npmjs.com/package/tauri-plugin-musickit-api) on npm

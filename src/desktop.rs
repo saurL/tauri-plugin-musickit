@@ -125,11 +125,11 @@ impl<R: Runtime> crate::MusicKitPlugin<R> {
 
     pub fn set_queue(
         &self,
-        _track_ids: Vec<String>,
+        _tracks: Vec<MusicKitTrack>,
         _start_playing: bool,
         _start_position: usize,
     ) -> Result<QueueOperationResponse> {
-        // Desktop implementation
+        // Desktop implementation - not supported
         Ok(QueueOperationResponse {
             success: false,
             error: Some("Not supported on desktop".to_string()),

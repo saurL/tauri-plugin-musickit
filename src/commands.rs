@@ -100,11 +100,11 @@ pub fn set_volume<R: Runtime>(app: AppHandle<R>, volume: f64) -> Result<()> {
 #[command(rename_all = "camelCase")]
 pub fn set_queue<R: Runtime>(
     app: AppHandle<R>,
-    track_ids: Vec<String>,
+    tracks: Vec<MusicKitTrack>,
     start_playing: bool,
     start_position: usize,
 ) -> Result<QueueOperationResponse> {
-    app.music_kit().set_queue(track_ids, start_playing, start_position)
+    app.music_kit().set_queue(tracks, start_playing, start_position)
 }
 
 #[command(rename_all = "camelCase")]

@@ -44,7 +44,7 @@ struct SeekPayload {
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 struct SetQueuePayload {
-    track_ids: Vec<String>,
+    tracks: Vec<MusicKitTrack>,
     start_playing: bool,
     start_position: usize,
 }
@@ -170,7 +170,7 @@ impl<R: Runtime> MusicKitPlugin<R> {
 
     pub fn set_queue(
         &self,
-        track_ids: Vec<String>,
+        tracks: Vec<MusicKitTrack>,
         start_playing: bool,
         start_position: usize,
     ) -> Result<QueueOperationResponse> {
@@ -178,7 +178,7 @@ impl<R: Runtime> MusicKitPlugin<R> {
             .run_mobile_plugin(
                 "setQueue",
                 SetQueuePayload {
-                    track_ids,
+                    tracks,
                     start_playing,
                     start_position,
                 },
