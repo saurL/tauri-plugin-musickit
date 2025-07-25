@@ -15,6 +15,18 @@ pub struct MusicKitTrack {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
+pub struct MusicKitTrackData {
+    pub id: String,
+    pub title: String,
+    pub artist_name: String,
+    pub album_name: String,
+    pub genre_names: String,
+    pub artwork: String,
+    pub duration_in_millis: i32,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct AuthorizationResponse {
     pub status: String, // "authorized", "notAuthorized", "error"
     pub error: Option<String>,
@@ -51,9 +63,11 @@ pub struct QueueOperationResponse {
 #[serde(rename_all = "camelCase")]
 pub struct StateUpdateEvent {
     pub playing: bool,
-    pub current_track: Option<MusicKitTrack>,
+    pub paused: bool,
+    pub current_track: Option<MusicKitTrackData>,
     pub current_time: f64,
     pub duration: f64,
+    pub progress: f64, // Add progress calculation
     pub queue_position: usize,
     pub shuffle_mode: String,
     pub repeat_mode: String,

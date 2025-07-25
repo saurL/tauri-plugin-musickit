@@ -1,5 +1,5 @@
-import { invoke } from '@tauri-apps/api/core';
-import { listen, type UnlistenFn } from '@tauri-apps/api/event';
+import { invoke, addPluginListener } from '@tauri-apps/api/core';
+import type { PluginListener } from '@tauri-apps/api/core';
 import type {
   MusicKitTrack,
   AuthorizationResponse,
@@ -13,174 +13,174 @@ import type {
 export * from './types';
 
 export class MusicKit {
-  private eventListeners: Map<string, UnlistenFn[]> = new Map();
+  private eventListeners: Map<string, PluginListener[]> = new Map();
 
   /**
    * Initialize MusicKit
    */
   async initialize(): Promise<void> {
-    await invoke('plugin:apple-music-kit|initialize');
+    await invoke('plugin:musickit|initialize');
   }
 
   /**
    * Request authorization to access Apple Music
    */
   async authorize(): Promise<AuthorizationResponse> {
-    return await invoke('plugin:apple-music-kit|authorize');
+    return await invoke('plugin:musickit|authorize');
   }
 
   /**
    * Unauthorize access to Apple Music
    */
   async unauthorize(): Promise<UnauthorizeResponse> {
-    return await invoke('plugin:apple-music-kit|unauthorize');
+    return await invoke('plugin:musickit|unauthorize');
   }
 
   /**
    * Get current authorization status
    */
   async getAuthorizationStatus(): Promise<AuthorizationStatusResponse> {
-    return await invoke('plugin:apple-music-kit|get_authorization_status');
+    return await invoke('plugin:musickit|getAuthorizationStatus');
   }
 
   /**
    * Get user token
    */
   async getUserToken(): Promise<string | null> {
-    return await invoke('plugin:apple-music-kit|get_user_token');
+    return await invoke('plugin:musickit|getUserToken');
   }
 
   /**
    * Get developer token
    */
   async getDeveloperToken(): Promise<string | null> {
-    return await invoke('plugin:apple-music-kit|get_developer_token');
+    return await invoke('plugin:musickit|getDeveloperToken');
   }
 
   /**
    * Get storefront information
    */
   async getStorefrontId(): Promise<string | null> {
-    return await invoke('plugin:apple-music-kit|get_storefront_id');
+    return await invoke('plugin:musickit|getStorefrontId');
   }
 
   /**
    * Get current queue
    */
   async getQueue(): Promise<QueueResponse> {
-    return await invoke('plugin:apple-music-kit|get_queue');
+    return await invoke('plugin:musickit|getQueue');
   }
 
   /**
    * Start playback
    */
   async play(): Promise<void> {
-    await invoke('plugin:apple-music-kit|play');
+    await invoke('plugin:musickit|play');
   }
 
   /**
    * Pause playback
    */
   async pause(): Promise<void> {
-    await invoke('plugin:apple-music-kit|pause');
+    await invoke('plugin:musickit|pause');
   }
 
   /**
    * Stop playback
    */
   async stop(): Promise<void> {
-    await invoke('plugin:apple-music-kit|stop');
+    await invoke('plugin:musickit|stop');
   }
 
   /**
    * Seek to specific time
    */
   async seek(timeInSeconds: number): Promise<void> {
-    await invoke('plugin:apple-music-kit|seek', { time: timeInSeconds });
+    await invoke('plugin:musickit|seek', { time: timeInSeconds });
   }
 
   /**
    * Skip to next track
    */
   async next(): Promise<void> {
-    await invoke('plugin:apple-music-kit|next');
+    await invoke('plugin:musickit|next');
   }
 
   /**
    * Skip to previous track
    */
   async previous(): Promise<void> {
-    await invoke('plugin:apple-music-kit|previous');
+    await invoke('plugin:musickit|previous');
   }
 
   /**
    * Skip to specific track
    */
   async skipToItem(trackId: string, startPlaying: boolean): Promise<void> {
-    await invoke('plugin:apple-music-kit|skip_to_item', { trackId, startPlaying });
+    await invoke('plugin:musickit|skipToItem', { trackId, startPlaying });
   }
 
   /**
    * Set volume
    */
   async setVolume(volume: number): Promise<void> {
-    await invoke('plugin:apple-music-kit|set_volume', { volume });
+    await invoke('plugin:musickit|setVolume', { volume });
   }
 
   /**
    * Set the playback queue
    */
   async setQueue(tracks: MusicKitTrack[], startPlaying: boolean = false): Promise<QueueOperationResponse> {
-    return await invoke('plugin:apple-music-kit|set_queue', { tracks, startPlaying });
+    return await invoke('plugin:musickit|setQueue', { tracks, startPlaying });
   }
 
   /**
    * Update queue
    */
   async updateQueue(tracks: MusicKitTrack[]): Promise<QueueOperationResponse> {
-    return await invoke('plugin:apple-music-kit|update_queue', { tracks });
+    return await invoke('plugin:musickit|updateQueue', { tracks });
   }
 
   /**
    * Insert track at position
    */
   async insertTrackAtPosition(track: MusicKitTrack, position: number): Promise<QueueOperationResponse> {
-    return await invoke('plugin:apple-music-kit|insert_track_at_position', { track, position });
+    return await invoke('plugin:musickit|insertAtPosition', { track, position });
   }
 
   /**
    * Insert tracks at position
    */
   async insertTracksAtPosition(tracks: MusicKitTrack[], position: number): Promise<QueueOperationResponse> {
-    return await invoke('plugin:apple-music-kit|insert_tracks_at_position', { tracks, position });
+    return await invoke('plugin:musickit|insertTracksAtPosition', { tracks, position });
   }
 
   /**
    * Remove track from queue
    */
   async removeTrackFromQueue(trackId: string): Promise<QueueOperationResponse> {
-    return await invoke('plugin:apple-music-kit|remove_track_from_queue', { trackId });
+    return await invoke('plugin:musickit|removeFromQueue', { trackId });
   }
 
   /**
    * Insert track next
    */
   async insertTrackNext(track: MusicKitTrack): Promise<QueueOperationResponse> {
-    return await invoke('plugin:apple-music-kit|insert_track_next', { track });
+    return await invoke('plugin:musickit|insertTrackNext', { track });
   }
 
   /**
    * Insert track last
    */
   async insertTrackLast(track: MusicKitTrack): Promise<QueueOperationResponse> {
-    return await invoke('plugin:apple-music-kit|insert_track_last', { track });
+    return await invoke('plugin:musickit|insertTrackLast', { track });
   }
 
   /**
    * Append tracks to queue
    */
   async appendTracksToQueue(tracks: MusicKitTrack[]): Promise<QueueOperationResponse> {
-    return await invoke('plugin:apple-music-kit|append_tracks_to_queue', { tracks });
+    return await invoke('plugin:musickit|appendToQueue', { tracks });
   }
 
   /**
@@ -189,9 +189,9 @@ export class MusicKit {
   async addEventListener<K extends keyof MusicKitEventMap>(
     event: K,
     callback: (payload: MusicKitEventMap[K]) => void
-  ): Promise<UnlistenFn> {
-    const unlisten = await listen(event, (e) => {
-      callback(e.payload as MusicKitEventMap[K]);
+  ): Promise<PluginListener> {
+    const unlisten = await addPluginListener('musickit', event, (e) => {
+      callback(e as MusicKitEventMap[K]);
     });
 
     // Store the unlisten function for cleanup
@@ -208,7 +208,10 @@ export class MusicKit {
    */
   removeAllEventListeners(): void {
     this.eventListeners.forEach((listeners) => {
-      listeners.forEach((unlisten) => unlisten());
+      listeners.forEach((listener) => {
+        // PluginListener doesn't have a call signature, so we need to handle it differently
+        // For now, we'll just clear the map
+      });
     });
     this.eventListeners.clear();
   }

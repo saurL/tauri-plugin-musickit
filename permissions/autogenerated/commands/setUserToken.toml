@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-setUserToken"
+description = "Enables the setUserToken command without any pre-configured scope."
+commands.allow = ["setUserToken"]
+
+[[permission]]
+identifier = "deny-setUserToken"
+description = "Denies the setUserToken command without any pre-configured scope."
+commands.deny = ["setUserToken"]

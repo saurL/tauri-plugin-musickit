@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-getQueue"
+description = "Enables the getQueue command without any pre-configured scope."
+commands.allow = ["getQueue"]
+
+[[permission]]
+identifier = "deny-getQueue"
+description = "Denies the getQueue command without any pre-configured scope."
+commands.deny = ["getQueue"]

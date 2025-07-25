@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-setDeveloperToken"
+description = "Enables the setDeveloperToken command without any pre-configured scope."
+commands.allow = ["setDeveloperToken"]
+
+[[permission]]
+identifier = "deny-setDeveloperToken"
+description = "Denies the setDeveloperToken command without any pre-configured scope."
+commands.deny = ["setDeveloperToken"]

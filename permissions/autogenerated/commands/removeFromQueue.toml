@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-removeFromQueue"
+description = "Enables the removeFromQueue command without any pre-configured scope."
+commands.allow = ["removeFromQueue"]
+
+[[permission]]
+identifier = "deny-removeFromQueue"
+description = "Denies the removeFromQueue command without any pre-configured scope."
+commands.deny = ["removeFromQueue"]

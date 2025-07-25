@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-getAuthorizationStatus"
+description = "Enables the getAuthorizationStatus command without any pre-configured scope."
+commands.allow = ["getAuthorizationStatus"]
+
+[[permission]]
+identifier = "deny-getAuthorizationStatus"
+description = "Denies the getAuthorizationStatus command without any pre-configured scope."
+commands.deny = ["getAuthorizationStatus"]

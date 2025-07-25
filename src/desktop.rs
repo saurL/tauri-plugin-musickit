@@ -55,7 +55,22 @@ impl<R: Runtime> crate::MusicKitPlugin<R> {
         Ok(None)
     }
 
+    pub fn set_developer_token(&self, _token: String) -> Result<()> {
+        // Desktop implementation - not supported
+        Ok(())
+    }
+
+    pub fn set_user_token(&self, _token: String) -> Result<()> {
+        // Desktop implementation - not supported
+        Ok(())
+    }
+
     pub fn get_storefront_id(&self) -> Result<Option<String>> {
+        // Desktop implementation
+        Ok(None)
+    }
+
+    pub fn get_storefront(&self) -> Result<Option<serde_json::Value>> {
         // Desktop implementation
         Ok(None)
     }
@@ -108,7 +123,12 @@ impl<R: Runtime> crate::MusicKitPlugin<R> {
         Ok(())
     }
 
-    pub fn set_queue(&self, _tracks: Vec<MusicKitTrack>, _start_playing: bool) -> Result<QueueOperationResponse> {
+    pub fn set_queue(
+        &self,
+        _track_ids: Vec<String>,
+        _start_playing: bool,
+        _start_position: usize,
+    ) -> Result<QueueOperationResponse> {
         // Desktop implementation
         Ok(QueueOperationResponse {
             success: false,
@@ -181,9 +201,11 @@ impl<R: Runtime> crate::MusicKitPlugin<R> {
         // Desktop implementation
         Ok(StateUpdateEvent {
             playing: false,
+            paused: false,
             current_track: None,
             current_time: 0.0,
             duration: 0.0,
+            progress: 0.0,
             queue_position: 0,
             shuffle_mode: "off".to_string(),
             repeat_mode: "none".to_string(),

@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-appendToQueue"
+description = "Enables the appendToQueue command without any pre-configured scope."
+commands.allow = ["appendToQueue"]
+
+[[permission]]
+identifier = "deny-appendToQueue"
+description = "Denies the appendToQueue command without any pre-configured scope."
+commands.deny = ["appendToQueue"]

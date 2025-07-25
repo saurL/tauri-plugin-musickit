@@ -295,6 +295,18 @@
       "type": "string",
       "oneOf": [
         {
+          "description": "Enables the appendToQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-appendToQueue",
+          "markdownDescription": "Enables the appendToQueue command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the appendToQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-appendToQueue",
+          "markdownDescription": "Denies the appendToQueue command without any pre-configured scope."
+        },
+        {
           "description": "Enables the append_to_queue command without any pre-configured scope.",
           "type": "string",
           "const": "allow-append-to-queue",
@@ -319,6 +331,102 @@
           "markdownDescription": "Denies the authorize command without any pre-configured scope."
         },
         {
+          "description": "Enables the getAuthorizationStatus command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-getAuthorizationStatus",
+          "markdownDescription": "Enables the getAuthorizationStatus command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the getAuthorizationStatus command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-getAuthorizationStatus",
+          "markdownDescription": "Denies the getAuthorizationStatus command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the getCurrentTrack command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-getCurrentTrack",
+          "markdownDescription": "Enables the getCurrentTrack command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the getCurrentTrack command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-getCurrentTrack",
+          "markdownDescription": "Denies the getCurrentTrack command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the getDeveloperToken command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-getDeveloperToken",
+          "markdownDescription": "Enables the getDeveloperToken command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the getDeveloperToken command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-getDeveloperToken",
+          "markdownDescription": "Denies the getDeveloperToken command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the getPlaybackState command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-getPlaybackState",
+          "markdownDescription": "Enables the getPlaybackState command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the getPlaybackState command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-getPlaybackState",
+          "markdownDescription": "Denies the getPlaybackState command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the getQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-getQueue",
+          "markdownDescription": "Enables the getQueue command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the getQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-getQueue",
+          "markdownDescription": "Denies the getQueue command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the getStorefront command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-getStorefront",
+          "markdownDescription": "Enables the getStorefront command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the getStorefront command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-getStorefront",
+          "markdownDescription": "Denies the getStorefront command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the getStorefrontId command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-getStorefrontId",
+          "markdownDescription": "Enables the getStorefrontId command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the getStorefrontId command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-getStorefrontId",
+          "markdownDescription": "Denies the getStorefrontId command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the getUserToken command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-getUserToken",
+          "markdownDescription": "Enables the getUserToken command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the getUserToken command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-getUserToken",
+          "markdownDescription": "Denies the getUserToken command without any pre-configured scope."
+        },
+        {
           "description": "Enables the get_authorization_status command without any pre-configured scope.",
           "type": "string",
           "const": "allow-get-authorization-status",
@@ -341,6 +449,18 @@
           "type": "string",
           "const": "deny-get-current-track",
           "markdownDescription": "Denies the get_current_track command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the get_developer_token command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-get-developer-token",
+          "markdownDescription": "Enables the get_developer_token command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the get_developer_token command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-get-developer-token",
+          "markdownDescription": "Denies the get_developer_token command without any pre-configured scope."
         },
         {
           "description": "Enables the get_playback_state command without any pre-configured scope.",
@@ -379,6 +499,18 @@
           "markdownDescription": "Denies the get_storefront_id command without any pre-configured scope."
         },
         {
+          "description": "Enables the get_user_token command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-get-user-token",
+          "markdownDescription": "Enables the get_user_token command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the get_user_token command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-get-user-token",
+          "markdownDescription": "Denies the get_user_token command without any pre-configured scope."
+        },
+        {
           "description": "Enables the initialize command without any pre-configured scope.",
           "type": "string",
           "const": "allow-initialize",
@@ -389,6 +521,18 @@
           "type": "string",
           "const": "deny-initialize",
           "markdownDescription": "Denies the initialize command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the insertAtPosition command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-insertAtPosition",
+          "markdownDescription": "Enables the insertAtPosition command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the insertAtPosition command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-insertAtPosition",
+          "markdownDescription": "Denies the insertAtPosition command without any pre-configured scope."
         },
         {
           "description": "Enables the insert_at_position command without any pre-configured scope.",
@@ -463,6 +607,30 @@
           "markdownDescription": "Denies the previous command without any pre-configured scope."
         },
         {
+          "description": "Enables the registerListener command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-registerListener",
+          "markdownDescription": "Enables the registerListener command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the registerListener command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-registerListener",
+          "markdownDescription": "Denies the registerListener command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the removeFromQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-removeFromQueue",
+          "markdownDescription": "Enables the removeFromQueue command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the removeFromQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-removeFromQueue",
+          "markdownDescription": "Denies the removeFromQueue command without any pre-configured scope."
+        },
+        {
           "description": "Enables the remove_from_queue command without any pre-configured scope.",
           "type": "string",
           "const": "allow-remove-from-queue",
@@ -487,6 +655,54 @@
           "markdownDescription": "Denies the seek command without any pre-configured scope."
         },
         {
+          "description": "Enables the setDeveloperToken command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-setDeveloperToken",
+          "markdownDescription": "Enables the setDeveloperToken command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the setDeveloperToken command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-setDeveloperToken",
+          "markdownDescription": "Denies the setDeveloperToken command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the setQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-setQueue",
+          "markdownDescription": "Enables the setQueue command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the setQueue command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-setQueue",
+          "markdownDescription": "Denies the setQueue command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the setUserToken command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-setUserToken",
+          "markdownDescription": "Enables the setUserToken command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the setUserToken command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-setUserToken",
+          "markdownDescription": "Denies the setUserToken command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the set_developer_token command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-set-developer-token",
+          "markdownDescription": "Enables the set_developer_token command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the set_developer_token command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-set-developer-token",
+          "markdownDescription": "Denies the set_developer_token command without any pre-configured scope."
+        },
+        {
           "description": "Enables the set_queue command without any pre-configured scope.",
           "type": "string",
           "const": "allow-set-queue",
@@ -497,6 +713,18 @@
           "type": "string",
           "const": "deny-set-queue",
           "markdownDescription": "Denies the set_queue command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the skipToItem command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-skipToItem",
+          "markdownDescription": "Enables the skipToItem command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the skipToItem command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-skipToItem",
+          "markdownDescription": "Denies the skipToItem command without any pre-configured scope."
         },
         {
           "description": "Enables the skip_to_item command without any pre-configured scope.",
@@ -535,10 +763,166 @@
           "markdownDescription": "Denies the unauthorize command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-initialize`\n- `allow-authorize`\n- `allow-get-authorization-status`\n- `allow-get-storefront-id`\n- `allow-get-queue`\n- `allow-play`\n- `allow-pause`\n- `allow-stop`\n- `allow-seek`\n- `allow-next`\n- `allow-previous`\n- `allow-skip-to-item`\n- `allow-set-queue`\n- `allow-append-to-queue`\n- `allow-insert-at-position`\n- `allow-remove-from-queue`\n- `allow-get-current-track`\n- `allow-get-playback-state`",
+          "description": "Default permissions for the musickit plugin\n#### This default permission set includes:\n\n- `allowInitialize`\n- `allowAuthorize`\n- `allowUnauthorize`\n- `allowGetAuthorizationStatus`\n- `allowGetUserToken`\n- `allowSetUserToken`\n- `allowGetDeveloperToken`\n- `allowSetDeveloperToken`\n- `allowGetStorefrontId`\n- `allowGetStorefront`\n- `allowSetStorefront`\n- `allowGetQueue`\n- `allowPlay`\n- `allowPause`\n- `allowStop`\n- `allowSeek`\n- `allowNext`\n- `allowPrevious`\n- `allowSkipToItem`\n- `allowSetQueue`\n- `allowGetCurrentTrack`\n- `allowGetPlaybackState`\n- `allowAppendTracksToQueue`\n- `allowInsertTrackAtPosition`\n- `allowRemoveTrackFromQueue`\n- `allowRegisterListener`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-initialize`\n- `allow-authorize`\n- `allow-get-authorization-status`\n- `allow-get-storefront-id`\n- `allow-get-queue`\n- `allow-play`\n- `allow-pause`\n- `allow-stop`\n- `allow-seek`\n- `allow-next`\n- `allow-previous`\n- `allow-skip-to-item`\n- `allow-set-queue`\n- `allow-append-to-queue`\n- `allow-insert-at-position`\n- `allow-remove-from-queue`\n- `allow-get-current-track`\n- `allow-get-playback-state`"
+          "markdownDescription": "Default permissions for the musickit plugin\n#### This default permission set includes:\n\n- `allowInitialize`\n- `allowAuthorize`\n- `allowUnauthorize`\n- `allowGetAuthorizationStatus`\n- `allowGetUserToken`\n- `allowSetUserToken`\n- `allowGetDeveloperToken`\n- `allowSetDeveloperToken`\n- `allowGetStorefrontId`\n- `allowGetStorefront`\n- `allowSetStorefront`\n- `allowGetQueue`\n- `allowPlay`\n- `allowPause`\n- `allowStop`\n- `allowSeek`\n- `allowNext`\n- `allowPrevious`\n- `allowSkipToItem`\n- `allowSetQueue`\n- `allowGetCurrentTrack`\n- `allowGetPlaybackState`\n- `allowAppendTracksToQueue`\n- `allowInsertTrackAtPosition`\n- `allowRemoveTrackFromQueue`\n- `allowRegisterListener`"
+        },
+        {
+          "description": "Allows initializing the MusicKit plugin",
+          "type": "string",
+          "const": "allowInitialize",
+          "markdownDescription": "Allows initializing the MusicKit plugin"
+        },
+        {
+          "description": "Allows authorizing the MusicKit plugin",
+          "type": "string",
+          "const": "allowAuthorize",
+          "markdownDescription": "Allows authorizing the MusicKit plugin"
+        },
+        {
+          "description": "Allows unauthorizing the MusicKit plugin",
+          "type": "string",
+          "const": "allowUnauthorize",
+          "markdownDescription": "Allows unauthorizing the MusicKit plugin"
+        },
+        {
+          "description": "Allows getting the authorization status",
+          "type": "string",
+          "const": "allowGetAuthorizationStatus",
+          "markdownDescription": "Allows getting the authorization status"
+        },
+        {
+          "description": "Allows getting the user token",
+          "type": "string",
+          "const": "allowGetUserToken",
+          "markdownDescription": "Allows getting the user token"
+        },
+        {
+          "description": "Allows setting the user token",
+          "type": "string",
+          "const": "allowSetUserToken",
+          "markdownDescription": "Allows setting the user token"
+        },
+        {
+          "description": "Allows getting the developer token",
+          "type": "string",
+          "const": "allowGetDeveloperToken",
+          "markdownDescription": "Allows getting the developer token"
+        },
+        {
+          "description": "Allows setting the developer token",
+          "type": "string",
+          "const": "allowSetDeveloperToken",
+          "markdownDescription": "Allows setting the developer token"
+        },
+        {
+          "description": "Allows getting the storefront ID",
+          "type": "string",
+          "const": "allowGetStorefrontId",
+          "markdownDescription": "Allows getting the storefront ID"
+        },
+        {
+          "description": "Allows getting the storefront",
+          "type": "string",
+          "const": "allowGetStorefront",
+          "markdownDescription": "Allows getting the storefront"
+        },
+        {
+          "description": "Allows setting the storefront ID",
+          "type": "string",
+          "const": "allowSetStorefront",
+          "markdownDescription": "Allows setting the storefront ID"
+        },
+        {
+          "description": "Allows getting the queue",
+          "type": "string",
+          "const": "allowGetQueue",
+          "markdownDescription": "Allows getting the queue"
+        },
+        {
+          "description": "Allows playing music",
+          "type": "string",
+          "const": "allowPlay",
+          "markdownDescription": "Allows playing music"
+        },
+        {
+          "description": "Allows pausing music",
+          "type": "string",
+          "const": "allowPause",
+          "markdownDescription": "Allows pausing music"
+        },
+        {
+          "description": "Allows stopping music",
+          "type": "string",
+          "const": "allowStop",
+          "markdownDescription": "Allows stopping music"
+        },
+        {
+          "description": "Allows seeking to a specific time",
+          "type": "string",
+          "const": "allowSeek",
+          "markdownDescription": "Allows seeking to a specific time"
+        },
+        {
+          "description": "Allows skipping to the next track",
+          "type": "string",
+          "const": "allowNext",
+          "markdownDescription": "Allows skipping to the next track"
+        },
+        {
+          "description": "Allows skipping to the previous track",
+          "type": "string",
+          "const": "allowPrevious",
+          "markdownDescription": "Allows skipping to the previous track"
+        },
+        {
+          "description": "Allows skipping to a specific item in the queue",
+          "type": "string",
+          "const": "allowSkipToItem",
+          "markdownDescription": "Allows skipping to a specific item in the queue"
+        },
+        {
+          "description": "Allows setting the queue",
+          "type": "string",
+          "const": "allowSetQueue",
+          "markdownDescription": "Allows setting the queue"
+        },
+        {
+          "description": "Allows getting the current track",
+          "type": "string",
+          "const": "allowGetCurrentTrack",
+          "markdownDescription": "Allows getting the current track"
+        },
+        {
+          "description": "Allows getting the playback state",
+          "type": "string",
+          "const": "allowGetPlaybackState",
+          "markdownDescription": "Allows getting the playback state"
+        },
+        {
+          "description": "Allows appending tracks to the queue",
+          "type": "string",
+          "const": "allowAppendTracksToQueue",
+          "markdownDescription": "Allows appending tracks to the queue"
+        },
+        {
+          "description": "Allows inserting a track at a position in the queue",
+          "type": "string",
+          "const": "allowInsertTrackAtPosition",
+          "markdownDescription": "Allows inserting a track at a position in the queue"
+        },
+        {
+          "description": "Allows removing a track from the queue",
+          "type": "string",
+          "const": "allowRemoveTrackFromQueue",
+          "markdownDescription": "Allows removing a track from the queue"
+        },
+        {
+          "description": "Allows registering event listeners",
+          "type": "string",
+          "const": "allowRegisterListener",
+          "markdownDescription": "Allows registering event listeners"
         }
       ]
     }

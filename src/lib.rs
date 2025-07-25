@@ -22,28 +22,34 @@ use desktop::MusicKitPlugin;
 #[cfg(mobile)]
 use mobile::MusicKitPlugin;
 
+#[cfg(target_os = "ios")]
+tauri::ios_plugin_binding!(init_plugin_apple_music_kit);
+
 /// An extension trait for Tauri's `Manager` that provides access to the MusicKit plugin API.
 pub trait MusicKitExt<R: Runtime> {
-    fn music_kit(&self) -> &MusicKitPlugin<R>;
+    fn music_kit(&self) -> tauri::State<'_, MusicKitPlugin<R>>;
 }
 
 impl<R: Runtime, T: Manager<R>> MusicKitExt<R> for T {
-    fn music_kit(&self) -> &MusicKitPlugin<R> {
-        self.state::<MusicKitPlugin<R>>().inner()
+    fn music_kit(&self) -> tauri::State<'_, MusicKitPlugin<R>> {
+        self.state::<MusicKitPlugin<R>>()
     }
 }
 
 /// Initializes the plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
-    Builder::new("apple-music-kit")
+    Builder::new("musickit")
         .invoke_handler(tauri::generate_handler![
             commands::initialize,
             commands::authorize,
             commands::unauthorize,
             commands::get_authorization_status,
             commands::get_user_token,
+            commands::set_user_token,
             commands::get_developer_token,
+            commands::set_developer_token,
             commands::get_storefront_id,
+            commands::get_storefront,
             commands::get_queue,
             commands::play,
             commands::pause,
@@ -74,3 +80,5 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
         })
         .build()
 }
+
+

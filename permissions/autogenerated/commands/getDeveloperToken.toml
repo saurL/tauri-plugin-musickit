@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-getDeveloperToken"
+description = "Enables the getDeveloperToken command without any pre-configured scope."
+commands.allow = ["getDeveloperToken"]
+
+[[permission]]
+identifier = "deny-getDeveloperToken"
+description = "Denies the getDeveloperToken command without any pre-configured scope."
+commands.deny = ["getDeveloperToken"]

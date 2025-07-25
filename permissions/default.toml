@@ -1,22 +1,160 @@
 [default]
-description = "Default permissions for the plugin"
+description = "Default permissions for the musickit plugin"
 permissions = [
-    "allow-initialize",
-    "allow-authorize",
-    "allow-get-authorization-status",
-    "allow-get-storefront-id",
-    "allow-get-queue",
-    "allow-play",
-    "allow-pause",
-    "allow-stop",
-    "allow-seek",
-    "allow-next",
-    "allow-previous",
-    "allow-skip-to-item",
-    "allow-set-queue",
-    "allow-append-to-queue",
-    "allow-insert-at-position",
-    "allow-remove-from-queue",
-    "allow-get-current-track",
-    "allow-get-playback-state"
+    "allowInitialize",
+    "allowAuthorize",
+    "allowUnauthorize",
+    "allowGetAuthorizationStatus",
+    "allowGetUserToken",
+    "allowSetUserToken",
+    "allowGetDeveloperToken",
+    "allowSetDeveloperToken",
+    "allowGetStorefrontId",
+    "allowGetStorefront",
+    "allowSetStorefront",
+    "allowGetQueue",
+    "allowPlay",
+    "allowPause",
+    "allowStop",
+    "allowSeek",
+    "allowNext",
+    "allowPrevious",
+    "allowSkipToItem",
+    "allowSetQueue",
+    "allowGetCurrentTrack",
+    "allowGetPlaybackState",
+    "allowAppendTracksToQueue",
+    "allowInsertTrackAtPosition",
+    "allowRemoveTrackFromQueue",
+    "allowRegisterListener"
 ]
+
+[[permission]]
+identifier = "allowInitialize"
+description = "Allows initializing the MusicKit plugin"
+commands.allow = ["initialize"]
+
+[[permission]]
+identifier = "allowAuthorize"
+description = "Allows authorizing the MusicKit plugin"
+commands.allow = ["authorize"]
+
+[[permission]]
+identifier = "allowUnauthorize"
+description = "Allows unauthorizing the MusicKit plugin"
+commands.allow = ["unauthorize"]
+
+[[permission]]
+identifier = "allowGetAuthorizationStatus"
+description = "Allows getting the authorization status"
+commands.allow = ["getAuthorizationStatus"]
+
+[[permission]]
+identifier = "allowGetUserToken"
+description = "Allows getting the user token"
+commands.allow = ["getUserToken"]
+
+[[permission]]
+identifier = "allowSetUserToken"
+description = "Allows setting the user token"
+commands.allow = ["setUserToken"]
+
+[[permission]]
+identifier = "allowGetDeveloperToken"
+description = "Allows getting the developer token"
+commands.allow = ["getDeveloperToken"]
+
+[[permission]]
+identifier = "allowSetDeveloperToken"
+description = "Allows setting the developer token"
+commands.allow = ["setDeveloperToken"]
+
+[[permission]]
+identifier = "allowGetStorefrontId"
+description = "Allows getting the storefront ID"
+commands.allow = ["getStorefrontId"]
+
+[[permission]]
+identifier = "allowGetStorefront"
+description = "Allows getting the storefront"
+commands.allow = ["getStorefront"]
+
+[[permission]]
+identifier = "allowSetStorefront"
+description = "Allows setting the storefront ID"
+commands.allow = ["setStorefront"]
+
+[[permission]]
+identifier = "allowGetQueue"
+description = "Allows getting the queue"
+commands.allow = ["getQueue"]
+
+[[permission]]
+identifier = "allowPlay"
+description = "Allows playing music"
+commands.allow = ["play"]
+
+[[permission]]
+identifier = "allowPause"
+description = "Allows pausing music"
+commands.allow = ["pause"]
+
+[[permission]]
+identifier = "allowStop"
+description = "Allows stopping music"
+commands.allow = ["stop"]
+
+[[permission]]
+identifier = "allowSeek"
+description = "Allows seeking to a specific time"
+commands.allow = ["seek"]
+
+[[permission]]
+identifier = "allowNext"
+description = "Allows skipping to the next track"
+commands.allow = ["next"]
+
+[[permission]]
+identifier = "allowPrevious"
+description = "Allows skipping to the previous track"
+commands.allow = ["previous"]
+
+[[permission]]
+identifier = "allowSkipToItem"
+description = "Allows skipping to a specific item in the queue"
+commands.allow = ["skipToItem"]
+
+[[permission]]
+identifier = "allowSetQueue"
+description = "Allows setting the queue"
+commands.allow = ["setQueue"]
+
+[[permission]]
+identifier = "allowGetCurrentTrack"
+description = "Allows getting the current track"
+commands.allow = ["getCurrentTrack"]
+
+[[permission]]
+identifier = "allowGetPlaybackState"
+description = "Allows getting the playback state"
+commands.allow = ["getPlaybackState"]
+
+[[permission]]
+identifier = "allowAppendTracksToQueue"
+description = "Allows appending tracks to the queue"
+commands.allow = ["appendTracksToQueue"]
+
+[[permission]]
+identifier = "allowInsertTrackAtPosition"
+description = "Allows inserting a track at a position in the queue"
+commands.allow = ["insertTrackAtPosition"]
+
+[[permission]]
+identifier = "allowRemoveTrackFromQueue"
+description = "Allows removing a track from the queue"
+commands.allow = ["removeTrackFromQueue"]
+
+[[permission]]
+identifier = "allowRegisterListener"
+description = "Allows registering event listeners"
+commands.allow = ["registerListener"]
