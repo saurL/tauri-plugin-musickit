@@ -1,7 +1,7 @@
 # Tauri Plugin MusicKit
 
 [![crates.io](https://img.shields.io/crates/v/tauri-plugin-musickit)](https://crates.io/crates/tauri-plugin-musickit)
-[![npm](https://img.shields.io/npm/v/tauri-plugin-musickit-api)](https://www.npmjs.com/package/tauri-plugin-musickit-api)
+[![npm](https://img.shields.io/npm/v/tauri-plugin-musickit)](https://www.npmjs.com/package/tauri-plugin-musickit)
 [![documentation](https://img.shields.io/badge/docs-API%20docs-blue)](https://docs.rs/tauri-plugin-musickit)
 [![License: Apache-2.0 OR MIT](https://img.shields.io/badge/License-Apache%202.0%20OR%20MIT-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -11,10 +11,12 @@ A Tauri 2 plugin providing comprehensive Apple MusicKit integration for iOS and 
 
 ### Core MusicKit Integration
 - **Authorization Management**: Request and check Apple Music authorization status
-- **Playback Control**: Play, pause, stop, seek, and control music playback
+- **Playback Control**: Play, pause, stop, seek, and control music playback with immediate resolve pattern
 - **Queue Management**: Set, update, insert, remove, and manage playback queue
 - **Track Information**: Get current track details, album art, and metadata
-- **Event System**: Listen to playback state changes, track changes, and time updates
+- **Rich Event System**: Listen to complete playback state changes, track changes, and time updates
+- **Convenience Methods**: Quick state checks (`isPlaying()`, `getCurrentTime()`, etc.)
+- **Type Safety**: Full TypeScript support with accurate type definitions
 - **Cross-Platform**: Works on both iOS and macOS with platform-specific optimizations
 
 ### Platform Support
@@ -46,11 +48,11 @@ tauri-plugin-musickit = "0.2.6"
 Install the TypeScript API bindings:
 
 ```bash
-npm install tauri-plugin-musickit-api
+npm install tauri-plugin-musickit
 # or
-yarn add tauri-plugin-musickit-api
+yarn add tauri-plugin-musickit
 # or
-pnpm add tauri-plugin-musickit-api
+pnpm add tauri-plugin-musickit
 ```
 
 ### 3. Register the Plugin (Rust)
@@ -96,7 +98,7 @@ Add the required permissions to your `src-tauri/tauri.conf.json`:
 ### TypeScript/JavaScript API
 
 ```typescript
-import { musicKit } from 'tauri-plugin-musickit-api';
+import { musicKit } from 'tauri-plugin-musickit';
 
 // Initialize the plugin
 await musicKit.initialize();
@@ -174,17 +176,28 @@ console.log('Current queue:', queue);
 // Skip to specific track
 await musicKit.skipToItem('123456789', true); // trackId, startPlaying
 
-// Listen to events
+// Convenience methods for quick state checks
+const isPlaying = await musicKit.isPlaying();
+const isPaused = await musicKit.isPaused();
+const currentTime = await musicKit.getCurrentTime();
+const duration = await musicKit.getDuration();
+const progress = await musicKit.getProgress();
+
+// Listen to events (events now contain complete playback state)
 await musicKit.addEventListener('musickit-playback-state-changed', (event) => {
-  console.log('Playback state changed:', event.state);
+  console.log('Playback state changed:', event.playing, event.currentTrack?.title);
 });
 
 await musicKit.addEventListener('musickit-track-changed', (event) => {
-  console.log('Track changed:', event.track);
+  console.log('Track changed:', event.currentTrack?.title, event.currentTime);
 });
 
 await musicKit.addEventListener('musickit-playback-time-changed', (event) => {
   console.log('Playback time:', event.currentTime);
+});
+
+await musicKit.addEventListener('musickit-queue-changed', (event) => {
+  console.log('Queue changed:', event.success);
 });
 
 // Clean up event listeners
@@ -222,16 +235,22 @@ musicKit.removeAllEventListeners();
 | `insertTrackLast` | Insert track at end | `{ track: MusicKitTrack }` | `QueueOperationResponse` |
 | `appendTracksToQueue` | Append tracks to queue | `{ tracks: MusicKitTrack[] }` | `QueueOperationResponse` |
 | `getCurrentTrack` | Get current track information | None | `MusicKitTrack \| null` |
-| `getPlaybackState` | Get current playback state | None | `StateUpdateEvent` |
+| `getPlaybackState` | Get current playback state | None | `PlaybackState` |
 | `getQueue` | Get current queue | None | `QueueResponse` |
+| `isPlaying` | Check if currently playing | None | `boolean` |
+| `isPaused` | Check if currently paused | None | `boolean` |
+| `getCurrentTime` | Get current playback time | None | `number` |
+| `getDuration` | Get track duration | None | `number` |
+| `getProgress` | Get playback progress (0-1) | None | `number` |
 
 ### Events
 
 | Event | Description | Payload |
 |-------|-------------|---------|
-| `musickit-playback-state-changed` | Playback state changed | `{ state: string }` |
-| `musickit-track-changed` | Current track changed | `{ track: TrackData }` |
+| `musickit-playback-state-changed` | Playback state changed | `PlaybackState` (complete state object) |
+| `musickit-track-changed` | Current track changed | `PlaybackState` (complete state object) |
 | `musickit-playback-time-changed` | Playback time updated | `{ currentTime: number }` |
+| `musickit-queue-changed` | Queue was modified | `{ success: boolean }` |
 
 ### TypeScript Types
 
@@ -271,12 +290,11 @@ interface QueueOperationResponse {
   error?: string;
 }
 
-interface StateUpdateEvent {
-  state: string; // "playing", "paused", "stopped", etc.
-}
-
-interface TrackChangeEvent {
-  track: {
+// Complete playback state object (used by both state and track change events)
+interface PlaybackState {
+  playing: boolean;
+  paused: boolean;
+  currentTrack: {
     id: string;
     title: string;
     artistName: string;
@@ -284,17 +302,32 @@ interface TrackChangeEvent {
     genreNames: string;
     durationInMillis: number;
     artwork: string;
-  };
+  } | null;
+  currentTime: number;
+  duration: number;
+  progress: number;
+  queuePosition: number;
+  shuffleMode: 'on' | 'off';
+  repeatMode: 'none' | 'all';
+  volume: number;
 }
+
+interface StateUpdateEvent extends PlaybackState {}
+interface TrackChangeEvent extends PlaybackState {}
 
 interface PlaybackTimeEvent {
   currentTime: number;
+}
+
+interface QueueChangeEvent {
+  success: boolean;
 }
 
 interface MusicKitEventMap {
   'musickit-playback-state-changed': StateUpdateEvent;
   'musickit-track-changed': TrackChangeEvent;
   'musickit-playback-time-changed': PlaybackTimeEvent;
+  'musickit-queue-changed': QueueChangeEvent;
 }
 ```
 
@@ -372,4 +405,4 @@ at your option.
 ## Published Packages
 
 - **Rust Crate**: [`tauri-plugin-musickit`](https://crates.io/crates/tauri-plugin-musickit) on crates.io
-- **NPM Package**: [`tauri-plugin-musickit-api`](https://www.npmjs.com/package/tauri-plugin-musickit-api) on npm
+- **NPM Package**: [`tauri-plugin-musickit`](https://www.npmjs.com/package/tauri-plugin-musickit) on npm

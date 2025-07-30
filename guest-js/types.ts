@@ -38,12 +38,10 @@ export interface QueueUpdateEvent {
   position: number;
 }
 
-export interface StateUpdateEvent {
-  state: string; // "playing", "paused", "stopped", etc.
-}
-
-export interface TrackChangeEvent {
-  track: {
+export interface PlaybackState {
+  playing: boolean;
+  paused: boolean;
+  currentTrack: {
     id: string;
     title: string;
     artistName: string;
@@ -51,8 +49,19 @@ export interface TrackChangeEvent {
     genreNames: string;
     durationInMillis: number;
     artwork: string;
-  };
+  } | null;
+  currentTime: number;
+  duration: number;
+  progress: number;
+  queuePosition: number;
+  shuffleMode: 'on' | 'off';
+  repeatMode: 'none' | 'all';
+  volume: number;
 }
+
+export interface StateUpdateEvent extends PlaybackState {}
+
+export interface TrackChangeEvent extends PlaybackState {}
 
 export interface PlaybackTimeEvent {
   currentTime: number;
@@ -63,8 +72,13 @@ export interface ErrorEvent {
   code?: string;
 }
 
+export interface QueueChangeEvent {
+  success: boolean;
+}
+
 export interface MusicKitEventMap {
   'musickit-playback-state-changed': StateUpdateEvent;
   'musickit-track-changed': TrackChangeEvent;
   'musickit-playback-time-changed': PlaybackTimeEvent;
+  'musickit-queue-changed': QueueChangeEvent;
 } 

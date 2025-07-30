@@ -120,6 +120,7 @@ public class MusicKitPlugin: Plugin {
     private var timeObserver: Timer?
     private var cancellables: Set<AnyCancellable> = []
     private var debounceTimer: Timer?
+    private var playbackStateDebounceTimer: Timer?
     
     // Queue management
     private let queueManager = QueueManager.shared
@@ -166,6 +167,7 @@ public class MusicKitPlugin: Plugin {
         NotificationCenter.default.removeObserver(self)
         cancellables.forEach { $0.cancel() }
         debounceTimer?.invalidate()
+        playbackStateDebounceTimer?.invalidate()
     }
 
     	@objc public func initialize(_ invoke: Invoke) {
@@ -319,18 +321,22 @@ public class MusicKitPlugin: Plugin {
   }
   
   @objc public func play(_ invoke: Invoke) {
-    player.play()
-    invoke.resolve()
+    print("MusicKit Plugin: play() called")
+    invoke.resolve() // RESOLVE IMMEDIATELY FIRST
+    player.play() // THEN execute action
+    startTimeObserver()
   }
   
   @objc public func pause(_ invoke: Invoke) {
-    player.pause()
-    invoke.resolve()
+    print("MusicKit Plugin: pause() called")
+    invoke.resolve() // RESOLVE IMMEDIATELY FIRST
+    player.pause() // THEN execute action
   }
   
   @objc public func stop(_ invoke: Invoke) {
-    player.stop()
-    invoke.resolve()
+    print("MusicKit Plugin: stop() called")
+    invoke.resolve() // RESOLVE IMMEDIATELY FIRST
+    player.stop() // THEN execute action
   }
   
   @objc public func seek(_ invoke: Invoke) {
@@ -343,21 +349,23 @@ public class MusicKitPlugin: Plugin {
         print("MusicKit Plugin: Seeking to time: \(time)")
         
         // Use MPMusicPlayerController's seek functionality
-        player.currentPlaybackTime = time
-        invoke.resolve()
+        invoke.resolve() // RESOLVE IMMEDIATELY FIRST
+        player.currentPlaybackTime = time // THEN execute action
     } catch {
         invoke.reject("Invalid arguments for seek: \(error.localizedDescription)")
     }
   }
   
   @objc public func next(_ invoke: Invoke) {
-    player.skipToNextItem()
-    invoke.resolve()
+    print("MusicKit Plugin: next() called")
+    invoke.resolve() // RESOLVE IMMEDIATELY FIRST
+    player.skipToNextItem() // THEN call skip
   }
   
   @objc public func previous(_ invoke: Invoke) {
-    player.skipToPreviousItem()
-    invoke.resolve()
+    print("MusicKit Plugin: previous() called")
+    invoke.resolve() // RESOLVE IMMEDIATELY FIRST
+    player.skipToPreviousItem() // THEN call skip
   }
   
   @objc public func skipToItem(_ invoke: Invoke) {
@@ -375,16 +383,16 @@ public class MusicKitPlugin: Plugin {
             // Find the position of this track in the current queue
             let queue = queueManager.getQueue()
             if let position = queue.firstIndex(where: { $0.id == trackId }) {
-                // Create a queue descriptor with the specific track
+                print("MusicKit Plugin: Successfully skipped to track at position: \(position)")
+                invoke.resolve() // RESOLVE IMMEDIATELY FIRST
+                
+                // THEN execute actions
                 let queueDescriptor = MPMusicPlayerStoreQueueDescriptor(storeIDs: [trackId])
                 player.setQueue(with: queueDescriptor)
                 
                 if startPlaying {
                     player.play()
                 }
-                
-                print("MusicKit Plugin: Successfully skipped to track at position: \(position)")
-                invoke.resolve()
             } else {
                 invoke.reject("Track not found in queue")
             }
@@ -409,7 +417,7 @@ public class MusicKitPlugin: Plugin {
         // This is a stub implementation as volume control is handled by the system
         // The volume parameter is ignored and system volume controls should be used instead
         
-        invoke.resolve()
+        invoke.resolve() // RESOLVE IMMEDIATELY (no action to perform)
     } catch {
         invoke.reject("Invalid arguments for setVolume: \(error.localizedDescription)")
     }
@@ -448,9 +456,14 @@ public class MusicKitPlugin: Plugin {
             if args.startPlaying {
                 print("MusicKit Plugin: Starting playback")
                 player.play()
+                startTimeObserver()
             }
             
             print("MusicKit Plugin: setQueue completed successfully")
+            
+            // Emit queue change event
+            trigger("musickit-queue-changed", data: ["success": true] as [String: JSValue])
+            
             invoke.resolve(["success": true, "error": ""])
         } catch {
             print("MusicKit Plugin: setQueue error: \(error.localizedDescription)")
@@ -476,6 +489,9 @@ public class MusicKitPlugin: Plugin {
             player.setQueue(with: queue)
             print("MusicKit Plugin: Queue updated with \(validTrackIds.count) tracks")
         }
+        
+        // Emit queue change event
+        trigger("musickit-queue-changed", data: ["success": true] as [String: JSValue])
         
         invoke.resolve(["success": true, "error": ""])
     } catch {
@@ -737,7 +753,12 @@ public class MusicKitPlugin: Plugin {
   
   @objc public func getPlaybackState(_ invoke: Invoke) {
     print("MusicKit Plugin: getPlaybackState called")
-    
+    let state = getCurrentPlaybackState()
+    print("MusicKit Plugin: getPlaybackState result:", state)
+    invoke.resolve(state)
+  }
+
+  private func getCurrentPlaybackState() -> [String: Any] {
     let currentItem = player.nowPlayingItem
     let currentTime = player.currentPlaybackTime
     let duration = currentItem?.playbackDuration ?? 0.0
@@ -783,15 +804,14 @@ public class MusicKitPlugin: Plugin {
         "currentTrack": trackData as Any,
         "currentTime": currentTime,
         "duration": duration,
-        "progress": progress,  // Add progress calculation
-        "queuePosition": player.indexOfNowPlayingItem, // Use actual queue position
-        "shuffleMode": player.shuffleMode == .default ? "off" : "on", // Use actual shuffle mode
-        "repeatMode": player.repeatMode == .default ? "none" : "all", // Use actual repeat mode
-        "volume": 1.0 // Use default volume since player.volume is unavailable in iOS
+        "progress": progress,
+        "queuePosition": player.indexOfNowPlayingItem,
+        "shuffleMode": player.shuffleMode == .default ? "off" : "on",
+        "repeatMode": player.repeatMode == .default ? "none" : "all",
+        "volume": 1.0
     ]
     
-    print("MusicKit Plugin: getPlaybackState result:", result)
-    invoke.resolve(result)
+    return result
   }
 
   @objc public func insertTrackNext(_ invoke: Invoke) {
@@ -853,38 +873,130 @@ public class MusicKitPlugin: Plugin {
   }
 
     @objc func handlePlaybackStateDidChange(notification: NSNotification) {
-        print("MusicKit Plugin: handlePlaybackStateDidChange called")
-        print("MusicKit Plugin: Current playback state: \(player.playbackState.toString())")
-        let data: [String: JSValue] = [
-            "state": player.playbackState.toString() as JSValue
-        ]
-        print("MusicKit Plugin: Triggering musickit-playback-state-changed")
-        trigger("musickit-playback-state-changed", data: data)
+        let currentItem = player.nowPlayingItem
+        let currentTime = player.currentPlaybackTime
+        let duration = currentItem?.playbackDuration ?? 0.0
+        let playbackState = player.playbackState
         
-        if player.playbackState == .playing {
-            print("MusicKit Plugin: Starting time observer")
-            startTimeObserver()
-        } else {
-            print("MusicKit Plugin: Stopping time observer")
-            stopTimeObserver()
+        let isPlaying = playbackState == .playing
+        let isPaused = playbackState == .paused
+        
+        let progress = duration > 0 ? currentTime / duration : 0.0
+        
+        var trackData: [String: Any]? = nil
+        if let item = currentItem {
+            let trackId = item.playbackStoreID
+            if let shadowTrack = queueManager.findTrack(byId: trackId) {
+                trackData = [
+                    "id": shadowTrack.id,
+                    "title": shadowTrack.title,
+                    "artistName": shadowTrack.artistName,
+                    "albumName": shadowTrack.albumName,
+                    "genreNames": shadowTrack.genreNames,
+                    "durationInMillis": shadowTrack.durationInMillis,
+                    "artwork": shadowTrack.artwork
+                ]
+            } else {
+                trackData = [
+                    "id": item.playbackStoreID,
+                    "title": item.title ?? "",
+                    "artistName": item.artist ?? "",
+                    "albumName": item.albumTitle ?? "",
+                    "genreNames": item.genre ?? "",
+                    "durationInMillis": Int(duration * 1000)
+                ]
+            }
         }
+        
+        let result: [String: Any] = [
+            "playing": isPlaying,
+            "paused": isPaused,
+            "currentTrack": trackData as Any,
+            "currentTime": currentTime,
+            "duration": duration,
+            "progress": progress,
+            "queuePosition": player.indexOfNowPlayingItem,
+            "shuffleMode": player.shuffleMode == .default ? "off" : "on",
+            "repeatMode": player.repeatMode == .default ? "none" : "all",
+            "volume": 1.0
+        ]
+        
+        let jsData = convertToJSValue(result)
+        trigger("musickit-playback-state-changed", data: jsData)
     }
 
     @objc func handleNowPlayingItemDidChange(notification: NSNotification) {
-        print("MusicKit Plugin: handleNowPlayingItemDidChange called")
+        let currentItem = player.nowPlayingItem
+        let currentTime = player.currentPlaybackTime
+        let duration = currentItem?.playbackDuration ?? 0.0
+        let playbackState = player.playbackState
         
-        // Debounce track changes to prevent spam
-        debounceTimer?.invalidate()
-        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
-            guard let self = self else { return }
-            
-            let trackData = self.itemToTrack(self.player.nowPlayingItem) ?? [:]
-            print("MusicKit Plugin: Track data: \(trackData)")
-            print("MusicKit Plugin: Triggering musickit-track-changed")
-            self.trigger("musickit-track-changed", data: [
-                "track": trackData
-            ])
+        let isPlaying = playbackState == .playing
+        let isPaused = playbackState == .paused
+        
+        let progress = duration > 0 ? currentTime / duration : 0.0
+        
+        var trackData: [String: Any]? = nil
+        if let item = currentItem {
+            let trackId = item.playbackStoreID
+            if let shadowTrack = queueManager.findTrack(byId: trackId) {
+                trackData = [
+                    "id": shadowTrack.id,
+                    "title": shadowTrack.title,
+                    "artistName": shadowTrack.artistName,
+                    "albumName": shadowTrack.albumName,
+                    "genreNames": shadowTrack.genreNames,
+                    "durationInMillis": shadowTrack.durationInMillis,
+                    "artwork": shadowTrack.artwork
+                ]
+            } else {
+                trackData = [
+                    "id": item.playbackStoreID,
+                    "title": item.title ?? "",
+                    "artistName": item.artist ?? "",
+                    "albumName": item.albumTitle ?? "",
+                    "genreNames": item.genre ?? "",
+                    "durationInMillis": Int(duration * 1000)
+                ]
+            }
         }
+        
+        let result: [String: Any] = [
+            "playing": isPlaying,
+            "paused": isPaused,
+            "currentTrack": trackData as Any,
+            "currentTime": currentTime,
+            "duration": duration,
+            "progress": progress,
+            "queuePosition": player.indexOfNowPlayingItem,
+            "shuffleMode": player.shuffleMode == .default ? "off" : "on",
+            "repeatMode": player.repeatMode == .default ? "none" : "all",
+            "volume": 1.0
+        ]
+        
+        let jsData = convertToJSValue(result)
+        trigger("musickit-track-changed", data: jsData)
+    }
+
+    private func convertToJSValue(_ state: [String: Any]) -> [String: JSValue] {
+        var jsData: [String: JSValue] = [:]
+        for (key, value) in state {
+            if let boolValue = value as? Bool {
+                jsData[key] = boolValue as JSValue
+            } else if let stringValue = value as? String {
+                jsData[key] = stringValue as JSValue
+            } else if let intValue = value as? Int {
+                jsData[key] = intValue as JSValue
+            } else if let doubleValue = value as? Double {
+                jsData[key] = doubleValue as JSValue
+            } else if let dictValue = value as? [String: Any] {
+                jsData[key] = convertToJSValue(dictValue) as JSValue
+            } else {
+                // Fallback for any other types
+                jsData[key] = "\(value)" as JSValue
+            }
+        }
+        return jsData
     }
 
     private func itemToTrack(_ item: MPMediaItem?) -> [String: JSValue]? {
@@ -925,11 +1037,28 @@ public class MusicKitPlugin: Plugin {
             return 
         }
         print("MusicKit Plugin: Creating new time observer")
-        timeObserver = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            guard let self = self else { return }
-            let currentTime = self.player.currentPlaybackTime
-            print("MusicKit Plugin: Time observer tick - current time: \(currentTime)")
-            self.trigger("musickit-playback-time-changed", data: ["currentTime": currentTime as JSValue])
+        
+        // Ensure timer runs on main thread
+        DispatchQueue.main.async {
+            self.timeObserver = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
+                guard let self = self else { 
+                    print("MusicKit Plugin: Timer fired but self is nil")
+                    return 
+                }
+                
+                // Only emit time events when actually playing
+                let playbackState = self.player.playbackState
+                let isPlaying = playbackState == .playing
+                
+                if isPlaying {
+                    let currentTime = self.player.currentPlaybackTime
+                    print("MusicKit Plugin: Time observer tick - current time: \(currentTime)")
+                    self.trigger("musickit-playback-time-changed", data: ["currentTime": currentTime as JSValue])
+                } else {
+                    print("MusicKit Plugin: Time observer tick - not playing, skipping event")
+                }
+            }
+            print("MusicKit Plugin: Timer scheduled on main thread")
         }
         print("MusicKit Plugin: Time observer started successfully")
     }

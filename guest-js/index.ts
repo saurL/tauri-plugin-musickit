@@ -241,6 +241,60 @@ export class MusicKit {
     const status = await this.getAuthorizationStatus();
     return status.status === 'authorized';
   }
+
+  /**
+   * Get current playback state
+   */
+  async getPlaybackState(): Promise<import('./types').PlaybackState> {
+    return await invoke('plugin:musickit|getPlaybackState');
+  }
+
+  /**
+   * Get current track
+   */
+  async getCurrentTrack(): Promise<MusicKitTrack | null> {
+    return await invoke('plugin:musickit|getCurrentTrack');
+  }
+
+  /**
+   * Check if currently playing
+   */
+  async isPlaying(): Promise<boolean> {
+    const state = await this.getPlaybackState();
+    return state.playing;
+  }
+
+  /**
+   * Check if currently paused
+   */
+  async isPaused(): Promise<boolean> {
+    const state = await this.getPlaybackState();
+    return state.paused;
+  }
+
+  /**
+   * Get current playback time in seconds
+   */
+  async getCurrentTime(): Promise<number> {
+    const state = await this.getPlaybackState();
+    return state.currentTime;
+  }
+
+  /**
+   * Get track duration in seconds
+   */
+  async getDuration(): Promise<number> {
+    const state = await this.getPlaybackState();
+    return state.duration;
+  }
+
+  /**
+   * Get playback progress as percentage (0-1)
+   */
+  async getProgress(): Promise<number> {
+    const state = await this.getPlaybackState();
+    return state.progress;
+  }
 }
 
 // Export singleton instance
