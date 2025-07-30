@@ -1,6 +1,6 @@
 [package]
 name = "tauri-plugin-musickit"
-version = "0.2.6"
+version = "0.2.7"
 description = "Tauri plugin for Apple MusicKit integration"
 authors = ["Patrick Quinn"]
 license = "MIT OR Apache-2.0"
