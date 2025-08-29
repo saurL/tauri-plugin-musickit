@@ -17,6 +17,19 @@ import com.apple.android.sdk.authentication.AuthenticationFactory
 import com.apple.android.sdk.authentication.AuthenticationManager
 import androidx.activity.ComponentActivity
 import app.tauri.annotation.Command
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
+import java.util.UUID
+
+fun <I, O> ComponentActivity.registerActivityResultLauncher(
+    contract: ActivityResultContract<I, O>,
+    callback: ActivityResultCallback<O>
+): ActivityResultLauncher<I> {
+    val key = UUID.randomUUID().toString()
+    return this.activityResultRegistry.register(key, contract, callback)
+}
 
 class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity) {
     private var pendingInvoke: Invoke? = null
@@ -43,10 +56,5 @@ class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity)
         pendingInvoke = invoke
         val intent = Intent(activity, AuthActivity::class.java)
         launcher?.launch(intent)
-    }
-
-    override fun destroy() {
-        launcher?.unregister()
-        super.destroy()
     }
 }
