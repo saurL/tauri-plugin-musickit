@@ -8,11 +8,7 @@ buildscript {
         google()
         gradlePluginPortal()
         mavenCentral()
-        flatDir {
-            dirs 'libs'
-        }
-
-    }
+           }
 
     dependencies {
         classpath("com.google.gms:google-services:4.4.2")
@@ -49,6 +45,13 @@ android {
         jvmTarget = "1.8"
     }
 }
+repositories {
+
+        flatDir {
+            dirs("libs")
+        }
+
+    }
 
 dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
