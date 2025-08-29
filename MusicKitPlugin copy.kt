@@ -15,12 +15,12 @@ import app.tauri.annotation.Command
 import androidx.activity.ComponentActivity
 
 
-class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
+class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity) {
     private var developerToken: String? = null
     private var userToken: String? = null
     private var pendingInvoke: Invoke? = null
     private var authenticationManager = AuthenticationFactory.createAuthenticationManager(activity)
-    private var authLauncher = (activity as ComponentActivity ).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private var authLauncher = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val data = result.data
             val invoke = pendingInvoke
             pendingInvoke = null
