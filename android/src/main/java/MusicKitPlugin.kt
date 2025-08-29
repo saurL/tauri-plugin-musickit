@@ -22,33 +22,11 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
     private var userToken: String? = null
     private var pendingInvoke: Invoke? = null
     private lateinit var authenticationManager: AuthenticationManager
-    private lateinit var authLauncher: androidx.activity.result.ActivityResultLauncher<Intent>
 
     override fun load(webView: WebView) {
         authenticationManager = AuthenticationFactory.createAuthenticationManager(activity)
 
-    authLauncher = (activity as ComponentActivity).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val data = result.data
-            val invoke = pendingInvoke
-            pendingInvoke = null
-
-            if (invoke == null) return@registerForActivityResult
-
-            val tokenResult = authenticationManager.handleTokenResult(data)
-            if (tokenResult.isError) {
-                invoke.reject("Failed: ${tokenResult.error}")
-            } else {
-                userToken = tokenResult.musicUserToken
-                val response = JSObject().apply {
-                    put("status", "AUTHORIZED")
-                    put("token", userToken!!)
-                }
-                invoke.resolve(response)
-            }
-        }
-
-
-    }
+       }
 
     override fun onNewIntent(intent: Intent) {
        
@@ -68,6 +46,27 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
         val intent = authenticationManager
             .createIntentBuilder(developerToken!!)
             .build()
+
+             authLauncher = (activity as ComponentActivity).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val data = result.data
+            val invoke = pendingInvoke
+            pendingInvoke = null
+
+            if (invoke == null) return@registerForActivityResult
+
+            val tokenResult = authenticationManager.handleTokenResult(data)
+            if (tokenResult.isError) {
+                invoke.reject("Failed: ${tokenResult.error}")
+            } else {
+                userToken = tokenResult.musicUserToken
+                val response = JSObject().apply {
+                    put("status", "AUTHORIZED")
+                    put("token", userToken!!)
+                }
+                invoke.resolve(response)
+            }
+        }
+
 
         authLauncher.launch(intent)
     }
