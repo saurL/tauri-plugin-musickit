@@ -13,21 +13,43 @@ import androidx.activity.result.contract.ActivityResultContracts
 import app.tauri.plugin.Invoke
 import app.tauri.plugin.JSObject
 import app.tauri.plugin.Plugin
-import app.tauri.annotation.Command
 import com.apple.android.sdk.authentication.AuthenticationFactory
 import com.apple.android.sdk.authentication.AuthenticationManager
 import androidx.activity.ComponentActivity
+import app.tauri.annotation.Command
 
 class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
     private var developerToken: String? = null
     private var userToken: String? = null
     private var pendingInvoke: Invoke? = null
     private lateinit var authenticationManager: AuthenticationManager
+    private lateinit var authLauncher: androidx.activity.result.ActivityResultLauncher<Intent>
 
     override fun load(webView: WebView) {
         authenticationManager = AuthenticationFactory.createAuthenticationManager(activity)
 
-       }
+    authLauncher = (activity as ComponentActivity).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val data = result.data
+            val invoke = pendingInvoke
+            pendingInvoke = null
+
+            if (invoke == null) return@registerForActivityResult
+
+            val tokenResult = authenticationManager.handleTokenResult(data)
+            if (tokenResult.isError) {
+                invoke.reject("Failed: ${tokenResult.error}")
+            } else {
+                userToken = tokenResult.musicUserToken
+                val response = JSObject().apply {
+                    put("status", "AUTHORIZED")
+                    put("token", userToken!!)
+                }
+                invoke.resolve(response)
+            }
+        }
+
+
+    }
 
     override fun onNewIntent(intent: Intent) {
        
@@ -37,25 +59,7 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
         Log.d("MusicKitPlugin", "authorize called")
         Log.d("MusicKitPlugin", "developerToken is null: ${developerToken == null}")
         Log.d("MusicKitPlugin", "developerToken length: ${developerToken?.length ?: 0}")
-        val authLauncher = (activity as ComponentActivity).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                    val data = result.data
-                    val invoke = pendingInvoke
-                    pendingInvoke = null
 
-                    if (invoke == null) return@registerForActivityResult
-
-                    val tokenResult = authenticationManager.handleTokenResult(data)
-                    if (tokenResult.isError) {
-                        invoke.reject("Failed: ${tokenResult.error}")
-                    } else {
-                        userToken = tokenResult.musicUserToken
-                        val response = JSObject().apply {
-                            put("status", "AUTHORIZED")
-                            put("token", userToken!!)
-                        }
-                        invoke.resolve(response)
-                    }
-                }
         if (developerToken == null) {
             invoke.reject("Developer token not set.")
             return
@@ -65,9 +69,6 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
         val intent = authenticationManager
             .createIntentBuilder(developerToken!!)
             .build()
-
-        
-
 
         authLauncher.launch(intent)
     }
