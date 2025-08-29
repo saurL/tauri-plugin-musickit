@@ -41,10 +41,12 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
         }
     @Command
     fun authorize(invoke: Invoke) {
-        Log.d("MusicKitPlugin", "authorize called")
-        Log.d("MusicKitPlugin", "developerToken is null: ${developerToken == null}")
-        Log.d("MusicKitPlugin", "developerToken length: ${developerToken?.length ?: 0}")
-
+        Log.i("MusicKitPlugin", "authorize called")
+        Log.i("MusicKitPlugin", "developerToken is null: ${developerToken == null}")
+        Log.i("MusicKitPlugin", "developerToken length: ${developerToken?.length ?: 0}")
+        Log.i("MusicKitPlugin", "authenticationManager is null: ${authenticationManager == null}")
+        Log.i("MusicKitPlugin", "authLauncher is null: ${authLauncher == null}")
+        Log.i("MusicKitPlugin", "activity is null: ${activity == null}")
         if (developerToken == null) {
             invoke.reject("Developer token not set.")
             return
