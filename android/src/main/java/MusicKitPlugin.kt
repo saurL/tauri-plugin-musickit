@@ -14,6 +14,7 @@ import com.apple.android.sdk.authentication.AuthenticationManager
 import app.tauri.annotation.Command
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
+import java.util.UUID
 
 class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
     private var developerToken: String? = null
@@ -40,7 +41,7 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
         Log.i("MusicKitPlugin", "developerToken is null: ${developerToken == null}")
         Log.i("MusicKitPlugin", "developerToken length: ${developerToken?.length ?: 0}")
         Log.i("MusicKitPlugin", "authenticationManager is null: ${authenticationManager == null}")
-        Log.i("MusicKitPlugin", "authLauncher is null: ${authLauncher == null}")
+        Log.i("MusicKitPlugin", "launcher is null: ${launcher == null}")
         Log.i("MusicKitPlugin", "activity is null: ${activity == null}")
         developerToken= "aaa"
         if (developerToken == null) {
