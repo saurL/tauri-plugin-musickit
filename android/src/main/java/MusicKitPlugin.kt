@@ -15,6 +15,7 @@ import app.tauri.plugin.JSObject
 import app.tauri.plugin.Plugin
 import com.apple.android.sdk.authentication.AuthenticationFactory
 import com.apple.android.sdk.authentication.AuthenticationManager
+import androidx.activity.ComponentActivity
 
 class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
     private var developerToken: String? = null
@@ -26,7 +27,7 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
     override fun load(webView: WebView) {
         authenticationManager = AuthenticationFactory.createAuthenticationManager(activity)
 
-    authLauncher = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    authLauncher = (activity as ComponentActivity).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val data = result.data
             val invoke = pendingInvoke
             pendingInvoke = null

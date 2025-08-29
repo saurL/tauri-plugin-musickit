@@ -3,7 +3,15 @@
   "version": "0.2.7",
   "author": "Patrick Quinn",
   "description": "Tauri plugin for Apple MusicKit integration - TypeScript API bindings",
-  "keywords": ["tauri", "plugin", "apple", "music", "musickit", "ios", "macos"],
+  "keywords": [
+    "tauri",
+    "plugin",
+    "apple",
+    "music",
+    "musickit",
+    "ios",
+    "macos"
+  ],
   "license": "MIT OR Apache-2.0",
   "repository": {
     "type": "git",
@@ -30,7 +38,8 @@
     "build": "bun run rollup -c && cargo build --release",
     "dev": "bun run rollup -c -w",
     "check": "tsc --noEmit && cargo check",
-    "prepublishOnly": "cd guest-js && bun run build"
+    "prepublishOnly": "cd guest-js && bun run build",
+    "prepare": "pnpm build"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.7.0"
