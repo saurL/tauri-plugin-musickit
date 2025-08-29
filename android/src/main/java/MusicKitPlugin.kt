@@ -15,13 +15,13 @@ import app.tauri.annotation.Command
 import androidx.activity.ComponentActivity
 
 
-class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity) {
+class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
     private var developerToken: String? = null
     private var userToken: String? = null
     private var pendingInvoke: Invoke? = null
     private var authenticationManager = AuthenticationFactory.createAuthenticationManager(activity)
 
-    private var authLauncher = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private var authLauncher = (activity as ComponentActivity).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val data = result.data
             val invoke = pendingInvoke
             pendingInvoke = null
@@ -48,6 +48,7 @@ class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity)
         Log.i("MusicKitPlugin", "authenticationManager is null: ${authenticationManager == null}")
         Log.i("MusicKitPlugin", "authLauncher is null: ${authLauncher == null}")
         Log.i("MusicKitPlugin", "activity is null: ${activity == null}")
+        developerToken= "aaa"
         if (developerToken == null) {
             invoke.reject("Developer token not set.")
             return
