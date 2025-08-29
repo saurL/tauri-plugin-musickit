@@ -19,31 +19,18 @@ import androidx.activity.ComponentActivity
 import app.tauri.annotation.Command
 import androidx.activity.result.ActivityResultCallback
 import java.util.UUID
-
-fun <I, O> ComponentActivity.registerActivityResultLauncher(
-    contract: ActivityResultContract<I, O>,
-    callback: ActivityResultCallback<O>
-): ActivityResultLauncher<I> {
-    val key = UUID.randomUUID().toString()
-    return this.activityResultRegistry.register(key, contract, callback)
-}
-
-class AuthActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // TODO: implémentation Apple Music
-    }
-}
-
+import android.os.Bundle
+import androidx.activity.result.ActivityResult
 
 class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity) {
     private var pendingInvoke: Invoke? = null
     private var launcher: ActivityResultLauncher<Intent>? = null
 
     override fun load(webView: WebView) {
-        launcher = activity.registerActivityResultLauncher(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
+        val key = UUID.randomUUID().toString()
+        val contract = ActivityResultContracts.StartActivityForResult()
+
+        launcher = activity.activityResultRegistry.register(key, contract, { result: ActivityResult ->
             if (pendingInvoke == null) return@registerActivityResultLauncher
 
             if (result.resultCode == Activity.RESULT_OK) {
@@ -53,7 +40,8 @@ class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity)
                 pendingInvoke?.reject("User cancelled")
             }
             pendingInvoke = null
-        }
+        })
+
     }
 
     @Command
