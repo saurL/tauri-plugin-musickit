@@ -13,7 +13,7 @@ import com.apple.android.sdk.authentication.AuthenticationFactory
 import com.apple.android.sdk.authentication.AuthenticationManager
 import app.tauri.annotation.Command
 import androidx.activity.ComponentActivity
-
+import androidx.activity.result.ActivityResult
 
 class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
     private var developerToken: String? = null
@@ -21,25 +21,19 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
     private var pendingInvoke: Invoke? = null
     private var authenticationManager = AuthenticationFactory.createAuthenticationManager(activity)
 
-    private var authLauncher = (activity as ComponentActivity).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val data = result.data
-            val invoke = pendingInvoke
-            pendingInvoke = null
+    val key = UUID.randomUUID().toString()
+    val contract = ActivityResultContracts.StartActivityForResult()
+    val launcher = (activity as ComponentActivity).activityResultRegistry.register(key, contract, { result: ActivityResult ->
+        if (pendingInvoke == null) return@register
 
-            if (invoke == null) return@registerForActivityResult
-
-            val tokenResult = authenticationManager.handleTokenResult(data)
-            if (tokenResult.isError) {
-                invoke.reject("Failed: ${tokenResult.error}")
-            } else {
-                userToken = tokenResult.musicUserToken
-                val response = JSObject().apply {
-                    put("status", "AUTHORIZED")
-                    put("token", userToken!!)
-                }
-                invoke.resolve(response)
-            }
+        if (result.resultCode == Activity.RESULT_OK) {
+            val token = result.data?.getStringExtra("token")
+            pendingInvoke?.resolve(JSObject().apply { put("token", token ?: "") })
+        } else {
+            pendingInvoke?.reject("User cancelled")
         }
+        pendingInvoke = null
+    })
     @Command
     fun authorize(invoke: Invoke) {
         Log.i("MusicKitPlugin", "authorize called")
@@ -59,6 +53,6 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
             .createIntentBuilder(developerToken!!)
             .build()
 
-        authLauncher.launch(intent)
+        launcher.launch(intent)
     }
 }
