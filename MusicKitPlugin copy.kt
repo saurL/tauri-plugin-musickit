@@ -20,6 +20,8 @@ class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity)
     private var userToken: String? = null
     private var pendingInvoke: Invoke? = null
     private var authenticationManager = AuthenticationFactory.createAuthenticationManager(activity)
+    Log.i("MusicKitPlugin", "authenticationManager is null: ${authenticationManager == null}")
+    Log.i("MusicKitPlugin", "activity is null: ${activity == null}")
     private var authLauncher = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val data = result.data
             val invoke = pendingInvoke

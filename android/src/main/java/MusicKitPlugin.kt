@@ -1,7 +1,3 @@
-// Copyright 2019-2023 Tauri Programme within The Commons Conservancy
-// SPDX-License-Identifier: Apache-2.0
-// SPDX-License-Identifier: MIT
-
 package app.tauri.musickit
 
 import android.app.Activity
@@ -15,46 +11,54 @@ import app.tauri.plugin.JSObject
 import app.tauri.plugin.Plugin
 import com.apple.android.sdk.authentication.AuthenticationFactory
 import com.apple.android.sdk.authentication.AuthenticationManager
-import androidx.activity.ComponentActivity
 import app.tauri.annotation.Command
-import androidx.activity.result.ActivityResultCallback
-import java.util.UUID
-import android.os.Bundle
-import androidx.activity.result.ActivityResult
-class AuthActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // TODO: implémenter Apple Music
-        // Exemple pour renvoyer un token de test :
-        val resultIntent = Intent().apply { putExtra("token", "TOKEN_TEST") }
-        setResult(Activity.RESULT_OK, resultIntent)
-        finish()
-    }
-}
+import androidx.activity.ComponentActivity
+
 
 class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity) {
+    private var developerToken: String? = null
+    private var userToken: String? = null
     private var pendingInvoke: Invoke? = null
+    private var authenticationManager = AuthenticationFactory.createAuthenticationManager(activity)
+    Log.i("MusicKitPlugin", "authenticationManager is null: ${authenticationManager == null}")
+    Log.i("MusicKitPlugin", "activity is null: ${activity == null}")
+    private var authLauncher = activity.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val data = result.data
+            val invoke = pendingInvoke
+            pendingInvoke = null
 
-    override fun load(webView: WebView) {
-    }
+            if (invoke == null) return@registerForActivityResult
 
+            val tokenResult = authenticationManager.handleTokenResult(data)
+            if (tokenResult.isError) {
+                invoke.reject("Failed: ${tokenResult.error}")
+            } else {
+                userToken = tokenResult.musicUserToken
+                val response = JSObject().apply {
+                    put("status", "AUTHORIZED")
+                    put("token", userToken!!)
+                }
+                invoke.resolve(response)
+            }
+        }
     @Command
     fun authorize(invoke: Invoke) {
-        val key = UUID.randomUUID().toString()
-        val contract = ActivityResultContracts.StartActivityForResult()
-        val launcher = activity.activityResultRegistry.register(key, contract, { result: ActivityResult ->
-            if (pendingInvoke == null) return@register
+        Log.i("MusicKitPlugin", "authorize called")
+        Log.i("MusicKitPlugin", "developerToken is null: ${developerToken == null}")
+        Log.i("MusicKitPlugin", "developerToken length: ${developerToken?.length ?: 0}")
+        Log.i("MusicKitPlugin", "authenticationManager is null: ${authenticationManager == null}")
+        Log.i("MusicKitPlugin", "authLauncher is null: ${authLauncher == null}")
+        Log.i("MusicKitPlugin", "activity is null: ${activity == null}")
+        if (developerToken == null) {
+            invoke.reject("Developer token not set.")
+            return
+        }
 
-            if (result.resultCode == Activity.RESULT_OK) {
-                val token = result.data?.getStringExtra("token")
-                pendingInvoke?.resolve(JSObject().apply { put("token", token ?: "") })
-            } else {
-                pendingInvoke?.reject("User cancelled")
-            }
-            pendingInvoke = null
-        })
         pendingInvoke = invoke
-        val intent = Intent(activity, AuthActivity::class.java)
-        launcher?.launch(intent)
+        val intent = authenticationManager
+            .createIntentBuilder(developerToken!!)
+            .build()
+
+        authLauncher.launch(intent)
     }
 }
