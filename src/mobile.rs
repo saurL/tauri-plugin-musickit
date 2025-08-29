@@ -30,8 +30,7 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
     #[cfg(target_os = "ios")]
     let handle = api.register_ios_plugin(init_plugin_wrapper)?;
     #[cfg(target_os = "android")]
-    let handle =
-        api.register_android_plugin("com.plugin.tauri-plugin-musickit", "MusicKitPlugin")?;
+    let handle = api.register_android_plugin("app.tauri.musickit", "MusicKitPlugin")?;
     Ok(MusicKitPlugin::new(handle))
 }
 
@@ -83,7 +82,9 @@ impl<R: Runtime> MusicKitPlugin<R> {
     }
 
     pub fn get_user_token(&self) -> Result<Option<String>> {
-        self.0.run_mobile_plugin("getUserToken", serde_json::json!({})).map_err(Into::into)
+        self.0
+            .run_mobile_plugin("getUserToken", serde_json::json!({}))
+            .map_err(Into::into)
     }
 
     pub fn get_developer_token(&self) -> Result<Option<String>> {
@@ -129,15 +130,21 @@ impl<R: Runtime> MusicKitPlugin<R> {
     }
 
     pub fn play(&self) -> Result<()> {
-        self.0.run_mobile_plugin("play", serde_json::json!({})).map_err(Into::into)
+        self.0
+            .run_mobile_plugin("play", serde_json::json!({}))
+            .map_err(Into::into)
     }
 
     pub fn pause(&self) -> Result<()> {
-        self.0.run_mobile_plugin("pause", serde_json::json!({})).map_err(Into::into)
+        self.0
+            .run_mobile_plugin("pause", serde_json::json!({}))
+            .map_err(Into::into)
     }
 
     pub fn stop(&self) -> Result<()> {
-        self.0.run_mobile_plugin("stop", serde_json::json!({})).map_err(Into::into)
+        self.0
+            .run_mobile_plugin("stop", serde_json::json!({}))
+            .map_err(Into::into)
     }
 
     pub fn seek(&self, time: f64) -> Result<()> {
@@ -147,7 +154,9 @@ impl<R: Runtime> MusicKitPlugin<R> {
     }
 
     pub fn next(&self) -> Result<()> {
-        self.0.run_mobile_plugin("next", serde_json::json!({})).map_err(Into::into)
+        self.0
+            .run_mobile_plugin("next", serde_json::json!({}))
+            .map_err(Into::into)
     }
 
     pub fn previous(&self) -> Result<()> {
