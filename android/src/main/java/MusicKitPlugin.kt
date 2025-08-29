@@ -34,13 +34,15 @@ class AuthActivity : ComponentActivity() {
 
 class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity) {
     private var pendingInvoke: Invoke? = null
-    private var launcher: ActivityResultLauncher<Intent>? = null
 
     override fun load(webView: WebView) {
+    }
+
+    @Command
+    fun authenticate(invoke: Invoke) {
         val key = UUID.randomUUID().toString()
         val contract = ActivityResultContracts.StartActivityForResult()
-
-        launcher = activity.activityResultRegistry.register(key, contract, { result: ActivityResult ->
+        val launcher = activity.activityResultRegistry.register(key, contract, { result: ActivityResult ->
             if (pendingInvoke == null) return@register
 
             if (result.resultCode == Activity.RESULT_OK) {
@@ -51,11 +53,6 @@ class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity)
             }
             pendingInvoke = null
         })
-
-    }
-
-    @Command
-    fun authenticate(invoke: Invoke) {
         pendingInvoke = invoke
         val intent = Intent(activity, AuthActivity::class.java)
         launcher?.launch(intent)
