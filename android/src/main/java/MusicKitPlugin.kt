@@ -21,6 +21,16 @@ import androidx.activity.result.ActivityResultCallback
 import java.util.UUID
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
+class AuthActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // TODO: implémenter Apple Music
+        // Exemple pour renvoyer un token de test :
+        val resultIntent = Intent().apply { putExtra("token", "TOKEN_TEST") }
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+    }
+}
 
 class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity) {
     private var pendingInvoke: Invoke? = null
@@ -31,7 +41,7 @@ class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity)
         val contract = ActivityResultContracts.StartActivityForResult()
 
         launcher = activity.activityResultRegistry.register(key, contract, { result: ActivityResult ->
-            if (pendingInvoke == null) return@registerActivityResultLauncher
+            if (pendingInvoke == null) return
 
             if (result.resultCode == Activity.RESULT_OK) {
                 val token = result.data?.getStringExtra("token")
