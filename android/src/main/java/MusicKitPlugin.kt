@@ -47,7 +47,7 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
             .createIntentBuilder(developerToken!!)
             .build()
 
-             authLauncher = (activity as ComponentActivity).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val authLauncher = (activity as ComponentActivity).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val data = result.data
             val invoke = pendingInvoke
             pendingInvoke = null
