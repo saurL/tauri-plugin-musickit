@@ -17,10 +17,7 @@ import com.apple.android.sdk.authentication.AuthenticationFactory
 import com.apple.android.sdk.authentication.AuthenticationManager
 import androidx.activity.ComponentActivity
 import app.tauri.annotation.Command
-import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
 import java.util.UUID
 
 fun <I, O> ComponentActivity.registerActivityResultLauncher(
