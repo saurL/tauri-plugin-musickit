@@ -41,7 +41,7 @@ class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity)
         val contract = ActivityResultContracts.StartActivityForResult()
 
         launcher = activity.activityResultRegistry.register(key, contract, { result: ActivityResult ->
-            if (pendingInvoke == null) return
+            if (pendingInvoke == null) return@register
 
             if (result.resultCode == Activity.RESULT_OK) {
                 val token = result.data?.getStringExtra("token")
