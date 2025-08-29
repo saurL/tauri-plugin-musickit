@@ -39,7 +39,7 @@ class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity)
     }
 
     @Command
-    fun authenticate(invoke: Invoke) {
+    fun authorize(invoke: Invoke) {
         val key = UUID.randomUUID().toString()
         val contract = ActivityResultContracts.StartActivityForResult()
         val launcher = activity.activityResultRegistry.register(key, contract, { result: ActivityResult ->
