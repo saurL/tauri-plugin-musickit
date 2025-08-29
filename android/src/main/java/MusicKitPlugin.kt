@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import app.tauri.plugin.Invoke
 import app.tauri.plugin.JSObject
 import app.tauri.plugin.Plugin
+import app.tauri.annotation.Command
 import com.apple.android.sdk.authentication.AuthenticationFactory
 import com.apple.android.sdk.authentication.AuthenticationManager
 import androidx.activity.ComponentActivity
@@ -31,7 +32,7 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
     override fun onNewIntent(intent: Intent) {
        
     }
-
+    @Command
     fun authorize(invoke: Invoke) {
         Log.d("MusicKitPlugin", "authorize called")
         Log.d("MusicKitPlugin", "developerToken is null: ${developerToken == null}")
