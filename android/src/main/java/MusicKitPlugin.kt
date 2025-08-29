@@ -37,7 +37,25 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
         Log.d("MusicKitPlugin", "authorize called")
         Log.d("MusicKitPlugin", "developerToken is null: ${developerToken == null}")
         Log.d("MusicKitPlugin", "developerToken length: ${developerToken?.length ?: 0}")
+        val authLauncher = (activity as ComponentActivity).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                    val data = result.data
+                    val invoke = pendingInvoke
+                    pendingInvoke = null
 
+                    if (invoke == null) return@registerForActivityResult
+
+                    val tokenResult = authenticationManager.handleTokenResult(data)
+                    if (tokenResult.isError) {
+                        invoke.reject("Failed: ${tokenResult.error}")
+                    } else {
+                        userToken = tokenResult.musicUserToken
+                        val response = JSObject().apply {
+                            put("status", "AUTHORIZED")
+                            put("token", userToken!!)
+                        }
+                        invoke.resolve(response)
+                    }
+                }
         if (developerToken == null) {
             invoke.reject("Developer token not set.")
             return
@@ -48,25 +66,7 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
             .createIntentBuilder(developerToken!!)
             .build()
 
-            val authLauncher = (activity as ComponentActivity).registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val data = result.data
-            val invoke = pendingInvoke
-            pendingInvoke = null
-
-            if (invoke == null) return@registerForActivityResult
-
-            val tokenResult = authenticationManager.handleTokenResult(data)
-            if (tokenResult.isError) {
-                invoke.reject("Failed: ${tokenResult.error}")
-            } else {
-                userToken = tokenResult.musicUserToken
-                val response = JSObject().apply {
-                    put("status", "AUTHORIZED")
-                    put("token", userToken!!)
-                }
-                invoke.resolve(response)
-            }
-        }
+        
 
 
         authLauncher.launch(intent)
