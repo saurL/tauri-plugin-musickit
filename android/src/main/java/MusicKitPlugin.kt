@@ -9,7 +9,7 @@ import android.content.Intent
 import android.util.Log
 import android.webkit.WebView
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import app.tauri.plugin.Invoke
 import app.tauri.plugin.JSObject
 import app.tauri.plugin.Plugin
@@ -28,6 +28,14 @@ fun <I, O> ComponentActivity.registerActivityResultLauncher(
     return this.activityResultRegistry.register(key, contract, callback)
 }
 
+class AuthActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // TODO: implémentation Apple Music
+    }
+}
+
+
 class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity) {
     private var pendingInvoke: Invoke? = null
     private var launcher: ActivityResultLauncher<Intent>? = null
@@ -40,7 +48,7 @@ class MusicKitPlugin(private val activity: ComponentActivity) : Plugin(activity)
 
             if (result.resultCode == Activity.RESULT_OK) {
                 val token = result.data?.getStringExtra("token")
-                pendingInvoke?.resolve(JSObject().apply { put("token", token) })
+                pendingInvoke?.resolve(JSObject().apply { put("token", token ?: "") })
             } else {
                 pendingInvoke?.reject("User cancelled")
             }
