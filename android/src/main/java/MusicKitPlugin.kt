@@ -15,6 +15,8 @@ import app.tauri.annotation.Command
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import java.util.UUID
+import app.tauri.annotation.InvokeArg
+
 
 @InvokeArg
 internal class TokenArgs {
