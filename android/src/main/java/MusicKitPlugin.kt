@@ -16,6 +16,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import java.util.UUID
 
+@InvokeArg
+internal class TokenArgs {
+  lateinit var token: String
+
+}
+
 class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
     private var developerToken: String? = null
     private var userToken: String? = null
@@ -43,8 +49,8 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
         Log.i("MusicKitPlugin", "authenticationManager is null: ${authenticationManager == null}")
         Log.i("MusicKitPlugin", "launcher is null: ${launcher == null}")
         Log.i("MusicKitPlugin", "activity is null: ${activity == null}")
-        developerToken= "aaa"
-        if (developerToken == null) {
+ 
+        if ( developerToken  == null) {
             invoke.reject("Developer token not set.")
             return
         }
@@ -55,5 +61,13 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
             .build()
 
         launcher.launch(intent)
+    }
+
+    @Command
+    fun setDeveloperToken(invoke: Invoke) {
+        Log.i("MusicKitPlugin", "setDeveloperToken called")
+        val args = invoke.parseArgs(TokenArgs::class.java)
+        developerToken = args.token
+        invoke.resolve()
     }
 }
