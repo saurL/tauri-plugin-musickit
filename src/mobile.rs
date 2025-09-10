@@ -48,6 +48,12 @@ struct SetQueuePayload {
     start_position: usize,
 }
 
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+struct SetDeveloperTokenPayload {
+    token: String,
+}
+
 #[derive(Debug)]
 pub struct MusicKitPlugin<R: Runtime>(PluginHandle<R>);
 
@@ -95,7 +101,7 @@ impl<R: Runtime> MusicKitPlugin<R> {
 
     pub fn set_developer_token(&self, token: String) -> Result<()> {
         self.0
-            .run_mobile_plugin("setDeveloperToken", token)
+            .run_mobile_plugin("setDeveloperToken", SetDeveloperTokenPayload { token })
             .map_err(Into::into)
     }
 
