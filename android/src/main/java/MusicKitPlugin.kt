@@ -37,9 +37,10 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
 
         if (result.resultCode == Activity.RESULT_OK) {
             val token = result.data?.getStringExtra("token")
-            pendingInvoke?.resolve(JSObject().apply { put("token", token ?: "") })
+            userToken= token
+            pendingInvoke?.resolve(JSObject().apply { put("status", "authorized") })
         } else {
-            pendingInvoke?.reject("User cancelled")
+            pendingInvoke?.resolve(JSObject().apply { put("status", "notAuthorized") })
         }
         pendingInvoke = null
     })
@@ -71,5 +72,15 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
         val args = invoke.parseArgs(TokenArgs::class.java)
         developerToken = args.token
         invoke.resolve()
+    }
+
+    @Command
+    fun getUserToken(invoke: Invoke) {
+        Log.i("MusicKitPlugin", "getUserToken called")
+        if (userToken == null) {
+            invoke.reject("User not authorized.")
+            return
+        }
+        invoke.resolve(JSObject().apply { put("token", userToken ?: "") })
     }
 }
