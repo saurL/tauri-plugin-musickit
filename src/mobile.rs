@@ -87,7 +87,7 @@ impl<R: Runtime> MusicKitPlugin<R> {
             .map_err(Into::into)
     }
 
-    pub fn get_user_token(&self) -> Result<Option<String>> {
+    pub fn get_user_token(&self) -> Result<GetUserTokenResponse> {
         self.0
             .run_mobile_plugin("getUserToken", serde_json::json!({}))
             .map_err(Into::into)

@@ -78,6 +78,6 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
             invoke.reject("User not authorized.")
             return
         }
-        invoke.resolve(userToken!!) 
+        invoke.resolve(JSObject().apply { put("token", userToken!!) })
     }
 }

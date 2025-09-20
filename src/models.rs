@@ -2,6 +2,12 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
+pub struct GetUserTokenResponse {
+    pub token: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MusicKitTrack {
     pub id: String,
     pub title: String,
@@ -107,4 +113,4 @@ pub struct TrackChangeEvent {
 pub struct ErrorEvent {
     pub error: String,
     pub code: Option<String>,
-} 
+}

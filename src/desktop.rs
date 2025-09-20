@@ -4,7 +4,6 @@ use crate::{models::*, Result};
 use serde::de::DeserializeOwned;
 use tauri::{plugin::PluginApi, AppHandle, Runtime};
 
-
 pub fn init<R: Runtime, C: DeserializeOwned>(
     app: &AppHandle<R>,
     _api: PluginApi<R, C>,
@@ -45,9 +44,9 @@ impl<R: Runtime> crate::MusicKitPlugin<R> {
         })
     }
 
-    pub fn get_user_token(&self) -> Result<Option<String>> {
+    pub fn get_user_token(&self) -> Result<GetUserTokenResponse> {
         // Desktop implementation
-        Ok(None)
+        Ok(GetUserTokenResponse { token: None })
     }
 
     pub fn get_developer_token(&self) -> Result<Option<String>> {
@@ -144,7 +143,11 @@ impl<R: Runtime> crate::MusicKitPlugin<R> {
         })
     }
 
-    pub fn insert_track_at_position(&self, _track: MusicKitTrack, _position: usize) -> Result<QueueOperationResponse> {
+    pub fn insert_track_at_position(
+        &self,
+        _track: MusicKitTrack,
+        _position: usize,
+    ) -> Result<QueueOperationResponse> {
         // Desktop implementation
         Ok(QueueOperationResponse {
             success: false,
@@ -152,7 +155,11 @@ impl<R: Runtime> crate::MusicKitPlugin<R> {
         })
     }
 
-    pub fn insert_tracks_at_position(&self, _tracks: Vec<MusicKitTrack>, _position: usize) -> Result<QueueOperationResponse> {
+    pub fn insert_tracks_at_position(
+        &self,
+        _tracks: Vec<MusicKitTrack>,
+        _position: usize,
+    ) -> Result<QueueOperationResponse> {
         // Desktop implementation
         Ok(QueueOperationResponse {
             success: false,
@@ -184,7 +191,10 @@ impl<R: Runtime> crate::MusicKitPlugin<R> {
         })
     }
 
-    pub fn append_tracks_to_queue(&self, _tracks: Vec<MusicKitTrack>) -> Result<QueueOperationResponse> {
+    pub fn append_tracks_to_queue(
+        &self,
+        _tracks: Vec<MusicKitTrack>,
+    ) -> Result<QueueOperationResponse> {
         // Desktop implementation
         Ok(QueueOperationResponse {
             success: false,

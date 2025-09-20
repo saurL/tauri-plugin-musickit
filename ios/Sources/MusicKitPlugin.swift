@@ -254,7 +254,7 @@ public class MusicKitPlugin: Plugin {
     print("MusicKit Plugin: userToken value: \(self.userToken ?? "nil")")
     print("MusicKit Plugin: userToken length: \(self.userToken?.count ?? 0)")
     // Return the token directly as a string to match frontend expectations
-    invoke.resolve(self.userToken ?? "")
+    invoke.resolve(["token": self.userToken ?? ""])
   }
   
   @objc public func getDeveloperToken(_ invoke: Invoke) {

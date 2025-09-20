@@ -1,6 +1,6 @@
 use tauri::{command, AppHandle, Runtime};
 
-use crate::{models::*, Result, MusicKitExt};
+use crate::{models::*, MusicKitExt, Result};
 
 #[command(rename_all = "camelCase")]
 pub fn initialize<R: Runtime>(app: AppHandle<R>) -> Result<()> {
@@ -18,13 +18,16 @@ pub fn unauthorize<R: Runtime>(app: AppHandle<R>) -> Result<UnauthorizeResponse>
 }
 
 #[command(rename_all = "camelCase")]
-pub fn get_authorization_status<R: Runtime>(app: AppHandle<R>) -> Result<AuthorizationStatusResponse> {
+pub fn get_authorization_status<R: Runtime>(
+    app: AppHandle<R>,
+) -> Result<AuthorizationStatusResponse> {
     app.music_kit().get_authorization_status()
 }
 
 #[command(rename_all = "camelCase")]
 pub fn get_user_token<R: Runtime>(app: AppHandle<R>) -> Result<Option<String>> {
-    app.music_kit().get_user_token()
+    let response = app.music_kit().get_user_token()?;
+    Ok(response.token)
 }
 
 #[command(rename_all = "camelCase")]
@@ -88,7 +91,11 @@ pub fn previous<R: Runtime>(app: AppHandle<R>) -> Result<()> {
 }
 
 #[command(rename_all = "camelCase")]
-pub fn skip_to_item<R: Runtime>(app: AppHandle<R>, track_id: String, start_playing: bool) -> Result<()> {
+pub fn skip_to_item<R: Runtime>(
+    app: AppHandle<R>,
+    track_id: String,
+    start_playing: bool,
+) -> Result<()> {
     app.music_kit().skip_to_item(track_id, start_playing)
 }
 
@@ -104,11 +111,15 @@ pub fn set_queue<R: Runtime>(
     start_playing: bool,
     start_position: usize,
 ) -> Result<QueueOperationResponse> {
-    app.music_kit().set_queue(tracks, start_playing, start_position)
+    app.music_kit()
+        .set_queue(tracks, start_playing, start_position)
 }
 
 #[command(rename_all = "camelCase")]
-pub fn update_queue<R: Runtime>(app: AppHandle<R>, tracks: Vec<MusicKitTrack>) -> Result<QueueOperationResponse> {
+pub fn update_queue<R: Runtime>(
+    app: AppHandle<R>,
+    tracks: Vec<MusicKitTrack>,
+) -> Result<QueueOperationResponse> {
     app.music_kit().update_queue(tracks)
 }
 
@@ -131,22 +142,34 @@ pub fn insert_tracks_at_position<R: Runtime>(
 }
 
 #[command(rename_all = "camelCase")]
-pub fn remove_track_from_queue<R: Runtime>(app: AppHandle<R>, track_id: String) -> Result<QueueOperationResponse> {
+pub fn remove_track_from_queue<R: Runtime>(
+    app: AppHandle<R>,
+    track_id: String,
+) -> Result<QueueOperationResponse> {
     app.music_kit().remove_track_from_queue(track_id)
 }
 
 #[command(rename_all = "camelCase")]
-pub fn insert_track_next<R: Runtime>(app: AppHandle<R>, track: MusicKitTrack) -> Result<QueueOperationResponse> {
+pub fn insert_track_next<R: Runtime>(
+    app: AppHandle<R>,
+    track: MusicKitTrack,
+) -> Result<QueueOperationResponse> {
     app.music_kit().insert_track_next(track)
 }
 
 #[command(rename_all = "camelCase")]
-pub fn insert_track_last<R: Runtime>(app: AppHandle<R>, track: MusicKitTrack) -> Result<QueueOperationResponse> {
+pub fn insert_track_last<R: Runtime>(
+    app: AppHandle<R>,
+    track: MusicKitTrack,
+) -> Result<QueueOperationResponse> {
     app.music_kit().insert_track_last(track)
 }
 
 #[command(rename_all = "camelCase")]
-pub fn append_tracks_to_queue<R: Runtime>(app: AppHandle<R>, tracks: Vec<MusicKitTrack>) -> Result<QueueOperationResponse> {
+pub fn append_tracks_to_queue<R: Runtime>(
+    app: AppHandle<R>,
+    tracks: Vec<MusicKitTrack>,
+) -> Result<QueueOperationResponse> {
     app.music_kit().append_tracks_to_queue(tracks)
 }
 
