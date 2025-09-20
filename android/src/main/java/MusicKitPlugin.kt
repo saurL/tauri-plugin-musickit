@@ -36,7 +36,7 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
         if (pendingInvoke == null) return@register
 
         if (result.resultCode == Activity.RESULT_OK) {
-            val tokenResult = AuthenticationManager.handleTokenResult(result.data!!)
+            val tokenResult = authenticationManager.handleTokenResult(result.data!!)
             userToken= tokenResult.getMusicUserToken()
 
             Log.i("MusicKitPlugin", "user token: $userToken")
