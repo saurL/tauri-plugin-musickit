@@ -37,6 +37,8 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
 
         if (result.resultCode == Activity.RESULT_OK) {
             val token = result.data?.getStringExtra("token")
+            Log.i("MusicKitPlugin", "user token: $token")
+
             userToken= token
             pendingInvoke?.resolve(JSObject().apply { put("status", "authorized") })
         } else {
