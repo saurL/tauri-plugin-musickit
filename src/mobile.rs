@@ -2,8 +2,8 @@
 
 use crate::{
     models::{
-        AuthorizationResponse, AuthorizationStatusResponse, MusicKitTrack, QueueOperationResponse,
-        QueueResponse, StateUpdateEvent, UnauthorizeResponse,
+        AuthorizationResponse, AuthorizationStatusResponse, GetUserTokenResponse, MusicKitTrack,
+        QueueOperationResponse, QueueResponse, StateUpdateEvent, UnauthorizeResponse,
     },
     Result,
 };
