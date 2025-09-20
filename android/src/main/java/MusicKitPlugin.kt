@@ -36,10 +36,11 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
         if (pendingInvoke == null) return@register
 
         if (result.resultCode == Activity.RESULT_OK) {
-            val token = result.data?.getStringExtra("token")
-            Log.i("MusicKitPlugin", "user token: $token")
+            val tokenResult = AuthenticationManager.handleTokenResult(result.data!!)
+            userToken= tokenResult.getMusicUserToken()
 
-            userToken= token
+            Log.i("MusicKitPlugin", "user token: $userToken")
+
             pendingInvoke?.resolve(JSObject().apply { put("status", "authorized") })
         } else {
             pendingInvoke?.resolve(JSObject().apply { put("status", "notAuthorized") })
@@ -48,12 +49,6 @@ class MusicKitPlugin(private val activity: Activity) : Plugin(activity) {
     })
     @Command
     fun authorize(invoke: Invoke) {
-        Log.i("MusicKitPlugin", "authorize called")
-        Log.i("MusicKitPlugin", "developerToken is null: ${developerToken == null}")
-        Log.i("MusicKitPlugin", "developerToken length: ${developerToken?.length ?: 0}")
-        Log.i("MusicKitPlugin", "authenticationManager is null: ${authenticationManager == null}")
-        Log.i("MusicKitPlugin", "launcher is null: ${launcher == null}")
-        Log.i("MusicKitPlugin", "activity is null: ${activity == null}")
  
         if ( developerToken  == null) {
             invoke.reject("Developer token not set.")
